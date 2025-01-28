@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 01:23:16 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/05 00:18:51 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/01/28 09:25:15 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,11 @@ int		ft_isdigit(int c);
 int		ft_isprint(int c);
 int		ft_ispunct(int c);
 int		ft_isspace(int c);
+void	skip_whitespace_index(const char *input, int *i);
 int		ft_islower(int c);
 int		ft_isupper(int c);
 int		ft_issign(int c);
 int		ft_isstrpositive(char *str);
-
-int		ft_abs(int num);
 
 void	*ft_calloc(size_t count, size_t size);
 void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
@@ -101,6 +100,7 @@ char	*ft_utoa(unsigned long long n);
 char	*ft_itoa_base(unsigned long long n, int base, int uppercase);
 
 char	*ft_strchr(const char *str, int c);
+char	*ft_strcpy(char *dst, const char *src);
 char	*ft_strdup(const char *src);
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
 char	*ft_strjoin(const char *s1, const char *s2);

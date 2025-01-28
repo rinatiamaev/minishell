@@ -6,7 +6,7 @@
 #    By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/21 12:19:10 by nlouis            #+#    #+#              #
-#    Updated: 2025/01/05 00:07:49 by nlouis           ###   ########.fr        #
+#    Updated: 2025/01/28 10:31:27 by nlouis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,6 +63,7 @@ SRCS	=	srcs/array/ft_copy_strarray.c \
 			srcs/str/ft_strjoin.c \
 			srcs/str/ft_strlcat.c \
 			srcs/str/ft_strlcpy.c \
+			srcs/str/ft_strcpy.c \
 			srcs/str/ft_strlen.c \
 			srcs/str/ft_strmapi.c \
 			srcs/str/ft_strcmp.c \
@@ -85,7 +86,6 @@ SRCS	=	srcs/array/ft_copy_strarray.c \
 			srcs/ft_printf/print_idux_zero_padding.c \
 			srcs/ft_printf/print_idux.c \
 			srcs/ft_printf/print_p_utils.c \
-			srcs/ft_printf/print_p.c \
 			srcs/ft_printf/process_format_string.c \
 			srcs/ft_printf/setup_format.c \
 			srcs/ft_printf/write_safely.c

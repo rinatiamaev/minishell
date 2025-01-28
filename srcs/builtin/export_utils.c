@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: riamaev <riamaev@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 18:05:21 by riamaev           #+#    #+#             */
-/*   Updated: 2025/01/26 18:52:56 by riamaev          ###   ########.fr       */
+/*   Updated: 2025/01/28 09:20:08 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,6 @@ bool	is_valid_identifier(const char *name)
 		i++;
 	}
 	return (true);
-}
-
-char	*ft_strcpy(char *dst, const char *src)
-{
-	char	*ret;
-
-	ret = dst;
-	while (*src)
-		*dst++ = *src++;
-	*dst = '\0';
-	return (ret);
 }
 
 int	find_env_variable(t_ms *ms, const char *var, size_t var_len)
