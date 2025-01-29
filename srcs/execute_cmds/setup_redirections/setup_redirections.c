@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 09:12:11 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/28 09:15:20 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/01/29 16:26:12 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static int	handle_input_redirection(t_cmd *cmd)
 }
 
 int	setup_redirections(t_cmd *cmd)
-{	
+{
 	if (cmd->input_redirect)
 	{
 		if (handle_input_redirection(cmd) == -1)

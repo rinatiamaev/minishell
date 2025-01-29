@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:00:13 by riamaev           #+#    #+#             */
-/*   Updated: 2025/01/29 13:29:35 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/01/29 16:25:58 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int	setup_pipe_redirection(int prev_fd, int next_fd)
 void	child_process(t_ms *ms, int prev_fd, int next_fd, t_cmd *cmd)
 {
 	char	**argv;
-	
+
 	argv = setup_argv(ms, cmd);
 	if (setup_pipe_redirection(prev_fd, next_fd) == -1)
 		exit(ms->exit_status = 1);
