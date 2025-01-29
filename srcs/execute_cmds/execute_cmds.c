@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   execute_cmds.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/26 20:15:57 by riamaev           #+#    #+#             */
-/*   Updated: 2025/01/28 10:36:04 by nlouis           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 static void	parent_process(t_ms *ms, pid_t pid, int *fd, int *prev_fd)
@@ -43,29 +31,6 @@ static void	handle_pipe(t_ms *ms, t_cmd *cmd, int *fd, int *next_fd)
 	}
 }
 
-static void	execute_external_cmd(t_ms *ms, t_cmd *cmd)
-{
-	int		fd[2];
-	int		prev_fd;
-	int		next_fd;
-	pid_t	pid;
-
-	prev_fd = -1;
-	while (cmd)
-	{
-		next_fd = -1;
-		handle_pipe(ms, cmd, fd, &next_fd);
-		pid = fork();
-		if (pid == -1)
-			error(ms, "fork() failed");
-		if (pid == 0)
-			child_process(ms, prev_fd, next_fd, cmd);
-		else
-			parent_process(ms, pid, fd, &prev_fd);
-		cmd = cmd->pipe_to;
-	}
-}
-
 void	execute_builtin_cmd(t_ms *ms, t_cmd *cmd)
 {
 	if (ft_strcmp(cmd->name, "echo") == 0)
@@ -92,8 +57,28 @@ void	execute_builtin_cmd(t_ms *ms, t_cmd *cmd)
 
 void	execute_cmd(t_ms *ms, t_cmd *cmd)
 {
-	if (cmd->builtin)
+	int		fd[2];
+	int		prev_fd;
+	int		next_fd;
+	pid_t	pid;
+
+	prev_fd = -1;
+	if (!cmd->pipe_to && cmd->builtin)
 		execute_builtin_cmd(ms, cmd);
-	else if (cmd->path)
-		execute_external_cmd(ms, cmd);
+	else
+	{
+		while (cmd)
+		{
+			next_fd = -1;
+			handle_pipe(ms, cmd, fd, &next_fd);
+			pid = fork();
+			if (pid == -1)
+				error(ms, "fork() failed");
+			if (pid == 0)
+				child_process(ms, prev_fd, next_fd, cmd);
+			else
+				parent_process(ms, pid, fd, &prev_fd);
+			cmd = cmd->pipe_to;
+		}
+	}
 }

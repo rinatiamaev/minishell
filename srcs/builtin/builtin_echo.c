@@ -40,12 +40,17 @@ void	builtin_echo(t_ms *ms, t_cmd *cmd)
 	int		i;
 	bool	no_newline;
 
-	i = 0;
+	i = 1;
 	no_newline = false;
 	while (cmd->args[i] && is_n_flag(cmd->args[i]))
 	{
 		no_newline = true;
 		i++;
+	}
+	if (!no_newline)
+	{
+		printf("\n");
+		return ;
 	}
 	while (cmd->args[i])
 	{
@@ -54,7 +59,5 @@ void	builtin_echo(t_ms *ms, t_cmd *cmd)
 			printf(" ");
 		i++;
 	}
-	if (!no_newline)
-		printf("\n");
 	ms->exit_status = 0;
 }
