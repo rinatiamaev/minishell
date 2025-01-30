@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 09:12:11 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/29 16:26:12 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/01/30 13:00:25 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,6 @@ int	setup_redirections(t_cmd *cmd)
 	if (cmd->input_redirect)
 	{
 		if (handle_input_redirection(cmd) == -1)
-			return (-1);
-	}
-	if (cmd->heredoc_delimiter)
-	{
-		if (handle_heredoc_redirection(cmd) == -1)
 			return (-1);
 	}
 	if (cmd->output_redirect)

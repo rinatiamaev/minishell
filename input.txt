@@ -1,0 +1,130 @@
+total 104
+drwxr-xr-x 2 nlouis 2020    25 Jan 28 07:40 include
+-rw-r--r-- 1 nlouis 2020     0 Jan 30 11:07 input.txt
+drwxr-xr-x 5 nlouis 2020    75 Jan 30 09:05 libft
+-rw-r--r-- 1 nlouis 2020  1069 Jan 28 07:40 LICENSE
+-rw-r--r-- 1 nlouis 2020  1655 Jan 30 09:05 Makefile
+-rwxr-xr-x 1 nlouis 2020 86992 Jan 30 09:29 minishell
+drwxr-xr-x 3 nlouis 2020    18 Jan 30 09:05 objs
+-rw-r--r-- 1 nlouis 2020    11 Jan 28 07:40 README.md
+drwxr-xr-x 8 nlouis 2020   125 Jan 30 09:01 srcs
+-rw-r--r-- 1 nlouis 2020  2672 Jan 30 09:10 test_commands.txt
+total 108
+drwxr-xr-x 2 nlouis 2020    25 Jan 28 07:40 include
+-rw-r--r-- 1 nlouis 2020   539 Jan 30 11:07 input.txt
+drwxr-xr-x 5 nlouis 2020    75 Jan 30 09:05 libft
+-rw-r--r-- 1 nlouis 2020  1069 Jan 28 07:40 LICENSE
+-rw-r--r-- 1 nlouis 2020  1655 Jan 30 09:05 Makefile
+-rwxr-xr-x 1 nlouis 2020 86992 Jan 30 09:29 minishell
+drwxr-xr-x 3 nlouis 2020    18 Jan 30 09:05 objs
+-rw-r--r-- 1 nlouis 2020    11 Jan 28 07:40 README.md
+drwxr-xr-x 8 nlouis 2020   125 Jan 30 09:01 srcs
+-rw-r--r-- 1 nlouis 2020  2672 Jan 30 09:10 test_commands.txt
+srcs/main.c: OK!
+srcs/utils/errors.c: OK!
+srcs/utils/free_memory.c: OK!
+srcs/builtin/builtin_cd.c: OK!
+srcs/builtin/builtin_env.c: OK!
+srcs/builtin/builtin_exit.c: OK!
+srcs/builtin/builtin_export.c: OK!
+srcs/builtin/builtin_pwd.c: OK!
+srcs/builtin/builtin_unset.c: OK!
+srcs/builtin/export_process.c: OK!
+srcs/builtin/export_utils.c: OK!
+srcs/builtin/builtin_echo.c: OK!
+srcs/signals/signals.c: OK!
+srcs/execute_cmds/child_process.c: OK!
+srcs/execute_cmds/execute_cmds.c: OK!
+srcs/execute_cmds/setup_redirections/handle_heredoc_redirection.c: OK!
+srcs/execute_cmds/setup_redirections/setup_redirections.c: OK!
+srcs/validate_cmds/is_external.c: OK!
+srcs/validate_cmds/validate_cmds.c: OK!
+srcs/validate_cmds/is_builtin.c: OK!
+srcs/process_input/process_input.c: OK!
+srcs/process_input/lexer/lexer.c: OK!
+srcs/process_input/lexer/create_tokens_utils.c: OK!
+srcs/process_input/lexer/create_tokens.c: OK!
+srcs/process_input/lexer/create_word_token.c: OK!
+srcs/process_input/lexer/expand_variable.c: OK!
+srcs/process_input/lexer/expand_variable_utils.c: OK!
+srcs/process_input/parser/parser.c: OK!
+srcs/process_input/parser/parse_redirection.c: OK!
+include/minishell.h: Error!
+Error: TOO_MANY_VALS        (line:  38, col:  67):	Too many values on define
+Error: TOO_MANY_VALS        (line:  38, col:  77):	Too many values on define
+Error: TOO_MANY_VALS        (line:  38, col:  87):	Too many values on define
+libft/srcs/str/ft_strcpy.c: OK!
+libft/srcs/str/ft_strchr.c: OK!
+libft/srcs/str/ft_strcmp.c: OK!
+libft/srcs/str/ft_strdup.c: OK!
+libft/srcs/str/ft_striteri.c: OK!
+libft/srcs/str/ft_strjoin.c: OK!
+libft/srcs/str/ft_strlcat.c: OK!
+libft/srcs/str/ft_strlcpy.c: OK!
+libft/srcs/str/ft_strlen.c: OK!
+libft/srcs/str/ft_strmapi.c: OK!
+libft/srcs/str/ft_strncmp.c: OK!
+libft/srcs/str/ft_strndup.c: OK!
+libft/srcs/str/ft_strnstr.c: OK!
+libft/srcs/str/ft_strrchr.c: OK!
+libft/srcs/str/ft_strtrim.c: OK!
+libft/srcs/str/ft_substr.c: OK!
+libft/srcs/str/ft_tolower.c: OK!
+libft/srcs/str/ft_toupper.c: OK!
+libft/srcs/StrNumConv/ft_atoi.c: OK!
+libft/srcs/StrNumConv/ft_itoa.c: OK!
+libft/srcs/StrNumConv/ft_itoa_base.c: OK!
+libft/srcs/StrNumConv/ft_utoa.c: OK!
+libft/srcs/write/ft_putchar_fd.c: OK!
+libft/srcs/write/ft_putendl_fd.c: OK!
+libft/srcs/write/ft_putnbr_fd.c: OK!
+libft/srcs/write/ft_putstr_fd.c: OK!
+libft/srcs/array/ft_copy_strarray.c: OK!
+libft/srcs/array/ft_free_array.c: OK!
+libft/srcs/array/ft_putintarray.c: OK!
+libft/srcs/array/ft_qsort.c: OK!
+libft/srcs/array/ft_split.c: OK!
+libft/srcs/check/ft_isalnum.c: OK!
+libft/srcs/check/ft_isalpha.c: OK!
+libft/srcs/check/ft_isascii.c: OK!
+libft/srcs/check/ft_isdigit.c: OK!
+libft/srcs/check/ft_islower.c: OK!
+libft/srcs/check/ft_isprint.c: OK!
+libft/srcs/check/ft_ispunct.c: OK!
+libft/srcs/check/ft_issign.c: OK!
+libft/srcs/check/ft_isspace.c: OK!
+libft/srcs/check/ft_isstrpositive.c: OK!
+libft/srcs/check/ft_isupper.c: OK!
+libft/srcs/ft_printf/ft_printf_utils.c: OK!
+libft/srcs/ft_printf/print_csper.c: OK!
+libft/srcs/ft_printf/print_csper_utils.c: OK!
+libft/srcs/ft_printf/print_idux.c: OK!
+libft/srcs/ft_printf/print_idux_hashflag.c: OK!
+libft/srcs/ft_printf/print_idux_precision.c: OK!
+libft/srcs/ft_printf/print_idux_print.c: OK!
+libft/srcs/ft_printf/print_idux_zero_padding.c: OK!
+libft/srcs/ft_printf/print_p_utils.c: OK!
+libft/srcs/ft_printf/process_format_string.c: OK!
+libft/srcs/ft_printf/setup_format.c: OK!
+libft/srcs/ft_printf/write_safely.c: OK!
+libft/srcs/ft_printf/ft_printf.c: OK!
+libft/srcs/gnl/get_next_line.c: OK!
+libft/srcs/list/ft_del.c: OK!
+libft/srcs/list/ft_lstadd_back.c: OK!
+libft/srcs/list/ft_lstadd_front.c: OK!
+libft/srcs/list/ft_lstclear.c: OK!
+libft/srcs/list/ft_lstdelone.c: OK!
+libft/srcs/list/ft_lstiter.c: OK!
+libft/srcs/list/ft_lstlast.c: OK!
+libft/srcs/list/ft_lstmap.c: OK!
+libft/srcs/list/ft_lstnew.c: OK!
+libft/srcs/list/ft_lstsize.c: OK!
+libft/srcs/mem/ft_bzero.c: OK!
+libft/srcs/mem/ft_calloc.c: OK!
+libft/srcs/mem/ft_memchr.c: OK!
+libft/srcs/mem/ft_memcmp.c: OK!
+libft/srcs/mem/ft_memcpy.c: OK!
+libft/srcs/mem/ft_memmove.c: OK!
+libft/srcs/mem/ft_memset.c: OK!
+libft/srcs/mem/ft_realloc.c: OK!
+libft/include/libft.h: OK!

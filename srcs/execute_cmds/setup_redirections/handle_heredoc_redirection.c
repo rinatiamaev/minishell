@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_heredoc_redirections.c                      :+:      :+:    :+:   */
+/*   handle_heredoc_redirection.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:14:20 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/28 09:22:52 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/01/30 13:00:50 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void	read_until_limiter(int temp_fd, const char *limiter)
 
 	while (1)
 	{
-		line = readline(BOLD_BLUE "🔹> " RESET);
+		line = readline(BOLD_BLUE "heredoc🔹> " RESET);
 		if (!line || ft_strcmp(line, limiter) == 0)
 		{
 			free(line);
@@ -70,7 +70,8 @@ static int	setup_heredoc(t_cmd *cmd)
 	in_fd = open_temp_file_for_reading();
 	if (in_fd == -1)
 		return (-1);
-	unlink(".here_doc_temp");
+	if (!cmd->pipe_to)
+		unlink(".here_doc_temp");
 	return (in_fd);
 }
 

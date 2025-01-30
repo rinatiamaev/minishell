@@ -33,23 +33,25 @@ SRCS =  srcs/builtin/builtin_cd.c \
 		srcs/validate_cmds/validate_cmds.c \
 		srcs/main.c 
 
-OBJS_MAIN   = $(SRCS:.c=.o)
+OBJSDIR = objs
+OBJS   = $(addprefix $(OBJSDIR)/,$(SRCS:.c=.o))
 
 LIBFT   = libft/libft.a
 
 all: $(NAME)
 
-$(NAME): $(OBJS_MAIN) $(LIBFT)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS_MAIN) $(LIBFT) -lreadline
+$(NAME): $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) -lreadline
 
 $(LIBFT):
 	make -C libft
 
-%.o: %.c include/minishell.h
+$(OBJSDIR)/%.o: %.c include/minishell.h
+	mkdir -p $(@D)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJS_MAIN)
+	rm -f $(OBJS)
 	make -C libft clean
 
 fclean: clean

@@ -1,0 +1,114 @@
+-Basic cmd
+- echo Hello ✔️
+
+cmd with multiple arguments
+- ls -l -a /usr/bin ✔️
+
+Single Pipe
+- echo "Hello World" | cat ✔️
+
+Multiple Pipes
+- echo hello | cat -e | wc -l ✔️
+
+Pipes at start or consecutive
+- | cat ✔️
+- echo Hello || grep Hello ✔️
+
+Redirection (Output)
+- ls > out.txt ✔️
+
+Redirection (Append)
+- echo "Appending text" >> logfile ✔️
+
+Redirection (Input)
+- cat < file.txt ✔️
+
+Combination of redirection and pipes
+- grep "hello" < input.txt | wc -w > count.txt ✔️
+
+Multiple cmds with pipes and redirections
+- echo "Hello" > file1 | cat -e file1 | wc -l | cat > final.txt ✔️
+
+Single quote
+- echo 'Hello World; special chars: # $? \' ✔️
+
+Double quotes
+- echo "" ✔️
+- echo "hello" ✔️
+- echo "hello" "world" ✔️
+- echo "Line1\nLine2\n" ✔️
+- echo "!@#$%^&*()_+" ✔️
+- echo "hello | world" ✔️
+- echo "hello > world" ✔️
+- echo "home is $HOME" ✔️
+- echo "this is $UNDEFINED" ✔️
+- echo "$USER is in $PWD" ✔️
+- echo "hello \"world\"" ❌
+- echo "price is \$10" ✔️
+- echo "price is $\10" ✔️
+- echo "this is a backslash \\" ✔️
+- echo "   " ?
+- echo "hello "world"" ❌
+- echo "'single inside double'" ✔️
+- echo "hello" > file.txt ✔️
+- echo "hello" | cat ✔️
+- echo hello"world" ❌
+
+Unclosed quotes
+- echo "Hello World ✔️
+- echo "hello | ✔️
+- echo "hello\ ✔️
+- echo 'Hello World ✔️
+
+Semicolon rejection
+- echo Hello; ✔️
+
+Backslash rejection
+- echo Hello \ ✔️
+
+Multiple cmds with pipes and redirections
+- echo "Hello" > file1 | cat -e file1 | wc -l | cat > final.txt ✔️
+
+Different commands:
+mkdir test
+rm -r directory_name
+
+cat > test.txt
+Hello,  minishell!
+This is written without echo.
+
+printf "This is a test message\n" > test.txt
+
+cat << EOF > test.txt
+Line 1
+Line 2
+Line 3
+EOF
+
+Redirect output to a file: ls > output.txt
+
+Append output to a file: printf "Appending this line" >> output.txt
+
+Redirect input from a file: cat < input.txt
+
+Redirect input and output: grep "pattern" < input.txt > output.txt
+
+Send output of one command to another: ls | grep "file"
+
+Multiple pipes: cat file.txt | grep "text" | wc -l
+
+Redirect output of a pipeline to a file: ls | grep "file" > filtered.txt
+
+Read input from a file, process it, and save the output: cat < input.txt | sort | uniq > output.txt
+
+Append output of a pipeline to a file: echo "new line" | tee -a file.txt
+
+Write to multiple outputs: printf "This is a test" | tee file1.txt file2.txt
+
+Command with no output (test handling of empty input): true > output.txt
+
+Invalid redirection: ls > /nonexistent_directory/output.txt
+
+Nested pipes: printf "line1\nline2" | grep "line" | wc -l
+
+
