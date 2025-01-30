@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 16:25:47 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/29 16:25:48 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/01/30 08:57:59 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,26 @@ void	execute_builtin_cmd(t_ms *ms, t_cmd *cmd)
 	}
 }
 
+void execute_builtin_without_pipe(t_ms *ms, t_cmd *cmd)
+{
+	int		stdin_backup;
+	int		stdout_backup;
+	
+	stdin_backup = dup(STDIN_FILENO);
+	stdout_backup = dup(STDOUT_FILENO);
+	if (stdin_backup == -1 || stdout_backup == -1)
+		error(ms, "dup() failed in execute_cmd");
+	if (setup_redirections(cmd) == -1)
+		ms->exit_status = 1;
+	else
+		execute_builtin_cmd(ms, cmd);
+	if (dup2(stdin_backup, STDIN_FILENO) == -1
+		|| dup2(stdout_backup, STDOUT_FILENO) == -1)
+		error(ms, "dup2() restore failed");
+	close(stdin_backup);
+	close(stdout_backup);	
+}
+
 void	execute_cmd(t_ms *ms, t_cmd *cmd)
 {
 	int		fd[2];
@@ -75,11 +95,12 @@ void	execute_cmd(t_ms *ms, t_cmd *cmd)
 	pid_t	pid;
 
 	prev_fd = -1;
+	next_fd = -1;
 	if (!cmd->pipe_to && cmd->builtin)
-		execute_builtin_cmd(ms, cmd);
+		execute_builtin_without_pipe(ms, cmd);
 	else
 	{
-		while (cmd)
+		while (cmd && cmd->pipe_to)
 		{
 			next_fd = -1;
 			handle_pipe(ms, cmd, fd, &next_fd);

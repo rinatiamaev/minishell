@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:43:40 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/28 10:28:04 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/01/30 08:01:03 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static int	parse_heredoc(t_ms *ms, t_cmd *cmd, t_tk **tks, int *i)
  *		- sets the `cmd->append` flag to the provided `append` value
  *	- returns: `0` on success, `-1` if a syntax error occurs.
  */
-static int	parse_redirect_output(t_ms *ms, int *i, int append)
+static int	parse_redirect_output(t_ms *ms, t_cmd *cmd, int *i, int append)
 {
 	(*i)++;
 	if (!ms->tks[*i])
@@ -66,10 +66,10 @@ static int	parse_redirect_output(t_ms *ms, int *i, int append)
 		syn_err(ms, "invalid tk after '>' or '>>'");
 		return (-1);
 	}
-	ms->cmd->output_redirect = ft_strdup(ms->tks[*i]->value);
-	if (!ms->cmd->output_redirect)
+	cmd->output_redirect = ft_strdup(ms->tks[*i]->value);
+	if (!cmd->output_redirect)
 		error(ms, "Error ft_strdup() failed in parse_redirect_output");
-	ms->cmd->append = append;
+	cmd->append = append;
 	return (0);
 }
 
@@ -124,9 +124,9 @@ int	parse_redirections(t_ms *ms, t_cmd *cmd, t_tk **tks, int *i)
 	if (tks[*i]->type == TK_REDIRECT_INPUT)
 		return (parse_redirect_input(ms, cmd, tks, i));
 	if (tks[*i]->type == TK_REDIRECT_OUTPUT)
-		return (parse_redirect_output(ms, i, 0));
+		return (parse_redirect_output(ms, cmd, i, 0));
 	if (tks[*i]->type == TK_APPEND_OUTPUT)
-		return (parse_redirect_output(ms, i, 1));
+		return (parse_redirect_output(ms, cmd, i, 1));
 	if (tks[*i]->type == TK_HEREDOC)
 		return (parse_heredoc(ms, cmd, tks, i));
 	return (0);
