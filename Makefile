@@ -1,5 +1,5 @@
 CC      = cc
-CFLAGS  = -g -Wall -Wextra -Werror -I libft/include -I ./include
+CFLAGS  = -Wall -Wextra -Werror -I libft/include -I ./include -g -fsanitize=address -fsanitize=undefined
 
 NAME = minishell
 

@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:20:10 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/28 10:26:47 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/01/31 14:02:18 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ static int	tkize_input(t_ms *ms, t_tk **tks, const char *input)
 	while (input[i] != '\0')
 	{
 		skip_whitespace_index(input, &i);
+		if (input[i] == '\0')
+			break;
 		tk = create_next_tk(ms, input, &i);
 		if (!tk)
 			return (-1);
