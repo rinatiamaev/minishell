@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 13:16:50 by riamaev           #+#    #+#             */
-/*   Updated: 2025/01/31 12:59:12 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/01/31 13:15:12 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static char	**create_new_envp(t_ms *ms, const char *key, size_t key_len)
 	j = 0;
 	while (ms->envp[i])
 	{
-		if (ft_strncmp(ms->envp[i], key, key_len) == 0 
+		if (ft_strncmp(ms->envp[i], key, key_len) == 0
 			&& ms->envp[i][key_len] == '=')
 			free(ms->envp[i]);
 		else

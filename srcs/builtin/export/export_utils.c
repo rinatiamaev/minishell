@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 18:05:21 by riamaev           #+#    #+#             */
-/*   Updated: 2025/01/31 12:22:06 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/01/31 13:15:49 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	find_env_variable(t_ms *ms, const char *var, size_t var_len)
 	return (-1);
 }
 
-static void append_new_env(t_ms *ms, const char *var)
+static void	append_new_env(t_ms *ms, const char *var)
 {
 	int		i;
 	char	**new_envp;
@@ -68,7 +68,7 @@ static void append_new_env(t_ms *ms, const char *var)
 	ms->envp = new_envp;
 }
 
-static int update_existing_env(t_ms *ms, const char *var)
+static int	update_existing_env(t_ms *ms, const char *var)
 {
 	char	*equals_sign;
 	int		var_len;
