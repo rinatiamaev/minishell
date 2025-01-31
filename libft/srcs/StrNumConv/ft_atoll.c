@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 21:00:10 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/31 08:05:20 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/01/31 07:51:42 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static bool	ft_check_overflow(long long num, char digit, int sign)
 	return (false);
 }
 
-long long	ft_atoi(const char *str)
+long long	ft_atoll(const char *str)
 {
 	long long	num;
 	int			sign;
@@ -57,5 +57,5 @@ long long	ft_atoi(const char *str)
 		num = num * 10 + (*str - '0');
 		str++;
 	}
-	return ((int)num * sign);
+	return (num * sign);
 }

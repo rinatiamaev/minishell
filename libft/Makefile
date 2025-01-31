@@ -6,7 +6,7 @@
 #    By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/21 12:19:10 by nlouis            #+#    #+#              #
-#    Updated: 2025/01/28 10:31:27 by nlouis           ###   ########.fr        #
+#    Updated: 2025/01/31 08:04:34 by nlouis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ SRCS	=	srcs/array/ft_copy_strarray.c \
 			srcs/check/ft_isalpha.c \
 			srcs/check/ft_isascii.c \
 			srcs/check/ft_isdigit.c \
+			srcs/check/ft_is_valid_num.c \
 			srcs/check/ft_isprint.c \
 			srcs/check/ft_ispunct.c \
 			srcs/check/ft_isspace.c \
@@ -54,6 +55,7 @@ SRCS	=	srcs/array/ft_copy_strarray.c \
 			srcs/write/ft_putnbr_fd.c \
 			srcs/write/ft_putstr_fd.c \
 			srcs/StrNumConv/ft_atoi.c \
+			srcs/StrNumConv/ft_atoll.c \
 			srcs/StrNumConv/ft_itoa.c \
 			srcs/StrNumConv/ft_utoa.c \
 			srcs/StrNumConv/ft_itoa_base.c \

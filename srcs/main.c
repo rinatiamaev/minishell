@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:27:16 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/30 08:28:03 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/01/31 07:33:16 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	main(int argc, char **argv, char **envp)
 
 	ms = setup_minishell(argc, argv, envp);
 	set_signals_interactive();
-	while (1)
+	while (true)
 	{
 		if (process_input(ms) == -1)
 		{
@@ -74,5 +74,5 @@ int	main(int argc, char **argv, char **envp)
 		set_signals_interactive();
 		reset_prompt(ms);
 	}
-	return (0);
+	return (ms->exit_status);
 }

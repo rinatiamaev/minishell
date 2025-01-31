@@ -1,25 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isstrpositive.c                                 :+:      :+:    :+:   */
+/*   ft_is_valid_num.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/08 14:09:44 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/31 08:03:15 by nlouis           ###   ########.fr       */
+/*   Created: 2025/01/31 07:55:29 by nlouis            #+#    #+#             */
+/*   Updated: 2025/01/31 08:01:50 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_isstrpositive(char *str)
+bool	ft_is_valid_number(const char *str)
 {
-	long long	value;
+	int	i;
 
-	if (str == NULL || str[0] == '\0')
-		return (0);
-	value = ft_atoll(str);
-	if (value < 0)
-		return (0);
-	return (1);
+	i = 0;
+	if (!str || !*str)
+		return (false);
+	if (str[i] == '+' || str[i] == '-')
+		i++;
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (false);
+		i++;
+	}
+	return (true);
 }
