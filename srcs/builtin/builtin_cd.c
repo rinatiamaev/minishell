@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: riamaev <riamaev@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 14:02:19 by riamaev           #+#    #+#             */
-/*   Updated: 2025/01/26 14:08:41 by riamaev          ###   ########.fr       */
+/*   Updated: 2025/01/31 09:56:54 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,91 @@ if successful, it prints current directory.
 
 static void	handle_cd_error(t_ms *ms, const char *target_dir)
 {
-	(void)target_dir;
-	perror("minishell: cd");
+	ft_putstr_fd(RED "⭕ Error: " RESET, STDERR_FILENO);
+	ft_putstr_fd(ms->cmd->name, STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+	if (target_dir)
+	{
+		ft_putstr_fd((char *)target_dir, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);	
+	}
+	if (errno)
+		perror("");
+	else
+		ft_putstr_fd("missing argument\n", STDERR_FILENO);
 	ms->exit_status = 1;
 }
 
+// MAXIMALIST IMPLEMENTATION
+
 static void	update_directory(t_ms *ms, const char *target_dir)
+{
+	char	cwd[1024];
+
+	if (chdir(target_dir) == -1)
+	{
+		handle_cd_error(ms, target_dir);
+		return ;
+	}
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
+	{
+		setenv("OLDPWD", getenv("PWD"), 1);
+		setenv("PWD", cwd, 1);
+	}
+	else
+		error(ms, "getcwd() failed");
+	ms->exit_status = 0;
+}
+
+void	builtin_cd(t_ms *ms, t_cmd *cmd)
+{
+	const char	*target_dir;
+
+	if (!cmd->args || !cmd->args[0])
+	{
+		target_dir = getenv("HOME");
+		if (!target_dir)
+		{
+			builtin_err(ms, "HOME not set");
+			ms->exit_status = 1;
+			return ;
+		}
+	}
+	else if (ft_strcmp(cmd->args[0], "-") == 0)
+	{
+		target_dir = getenv("OLDPWD");
+		if (!target_dir)
+		{
+			builtin_err(ms, "OLDPWD not set");
+			ms->exit_status = 1;
+			return ;
+		}
+		printf("%s\n", target_dir);
+	}
+	else
+		target_dir = cmd->args[0];
+	update_directory(ms, target_dir);
+}
+
+// MINIMALIST IMPLEMENTATION
+/* void	builtin_cd(t_ms *ms, t_cmd *cmd)
+{
+	if (!cmd->args || !cmd->args[0])
+	{
+		handle_cd_error(ms, NULL);
+		ms->exit_status = 1;
+		return ;
+	}
+	if (chdir(cmd->args[0]) == -1)
+	{
+		handle_cd_error(ms, (const char *)cmd->args[0]);
+		return ;
+	}
+	ms->exit_status = 0;
+} */
+
+// RINNAT IMPLEMENTATION
+/* static void	update_directory(t_ms *ms, const char *target_dir)
 {
 	char	cwd[1024];
 
@@ -45,8 +124,8 @@ static void	update_directory(t_ms *ms, const char *target_dir)
 
 void	builtin_cd(t_ms *ms, t_cmd *cmd)
 {
-	char	*target_dir;
-	char	*home_dir;
+	const char	*target_dir;
+	char		*home_dir;
 
 	target_dir = NULL;
 	home_dir = NULL;
@@ -65,4 +144,4 @@ void	builtin_cd(t_ms *ms, t_cmd *cmd)
 	}
 	printf("cd to: %s\n", target_dir);
 	update_directory(ms, target_dir);
-}
+} */

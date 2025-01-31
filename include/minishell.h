@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:27:36 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/30 13:01:37 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/01/31 09:06:17 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ void	free_all(t_ms *ms);
 // ERRORS
 void	syn_err(t_ms *ms, char *error_message);
 void	cmd_err(char *error_message);
+void	builtin_err(t_ms *ms, char *error_message);
 void	error(t_ms *ms, char *error_message);
 
 // BUILTINS

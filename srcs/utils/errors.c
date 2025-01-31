@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 08:54:46 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/28 09:23:05 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/01/31 09:25:44 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,27 @@ void	cmd_err(char *error_message)
 
 void	error(t_ms *ms, char *error_message)
 {
+	ft_putstr_fd(RED "❌ Error: " RESET, STDERR_FILENO);
+	if (ms->cmd->builtin)
+	{
+		ft_putstr_fd(ms->cmd->name, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+	}
+	ft_putstr_fd(error_message, STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
+	if (errno)
+		perror(error_message);
 	if (ms)
 		free_all(ms);
-	ft_putstr_fd(RED "❌ Error: " RESET, STDERR_FILENO);
-	perror(error_message);
 	rl_clear_history();
-	exit(EXIT_FAILURE);
+	exit(ms->exit_status);
+}
+
+void	builtin_err(t_ms *ms, char *error_message)
+{
+	ft_putstr_fd(RED "⭕ Error: " RESET, STDERR_FILENO);
+	ft_putstr_fd(ms->cmd->name, STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+	ft_putstr_fd(error_message, STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
 }

@@ -111,4 +111,15 @@ Invalid redirection: ls > /nonexistent_directory/output.txt
 
 Nested pipes: printf "line1\nline2" | grep "line" | wc -l
 
+EXIT test: ✔️
+exit hello ✔️
+exit 42 69 ✔️
+exit 300 ✔️
 
+CD test: ✔️
+cd ✔️
+cd .. ✔️
+cd srcs ✔️
+cd Minishell/srcs ✔️
+cd - ✔️
+cd Makefile ✔️
