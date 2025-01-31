@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 01:23:16 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/31 08:05:39 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/01/31 10:35:47 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ void		handle_minus_flag_p(char *str, int padding, t_pf *pf);
 void		print_right_aligned_p(t_fmt *fmt, char *str, int padding, t_pf *pf);
 void		format_and_print_id(t_fmt *fmt, va_list *args, t_pf *pf);
 void		format_and_print_u(t_fmt *fmt, va_list *args, t_pf *pf);
-void		format_and_print_x(t_fmt *fmt, va_list *args, int uppercase, t_pf *pf);
+void		format_and_print_x(t_fmt *fmt, va_list *args, int upper, t_pf *pf);
 char		*handle_precision_int(t_fmt *fmt, char *str, int *len, t_pf *pf);
 void		print_formatted_number(t_fmt *fmt, char *str, int len, t_pf *pf);
 int			requires_alternative_form(char specifier, char *str);

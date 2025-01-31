@@ -23,7 +23,6 @@ static bool	is_n_flag(const char *arg)
 {
 	int	i;
 
-	i = 1;
 	if (!arg || arg[0] != '-' || arg[1] == '\0')
 		return (false);
 	i = 1;
@@ -41,18 +40,16 @@ void	builtin_echo(t_ms *ms, t_cmd *cmd)
 	int		i;
 	bool	no_newline;
 
-	if (!cmd->args)
+	if (!cmd->args || !cmd->args[0])
 	{
 		printf("\n");
+		ms->exit_status = 0;
 		return ;
 	}
-	i = 0;
+	i = -1;
 	no_newline = false;
-	while (cmd->args[i] && is_n_flag(cmd->args[i]))
-	{
+	while (cmd->args[++i] && is_n_flag(cmd->args[i]))
 		no_newline = true;
-		i++;
-	}
 	while (cmd->args[i])
 	{
 		printf("%s", cmd->args[i]);

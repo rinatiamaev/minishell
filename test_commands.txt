@@ -123,3 +123,26 @@ cd srcs ✔️
 cd Minishell/srcs ✔️
 cd - ✔️
 cd Makefile ✔️
+
+ECHO test: ✔️
+echo ✔️
+echo hello ✔️
+echo hello world ✔️
+echo -n hello ✔️
+echo -nnnnn hello ✔️
+echo -n -n hello ✔️
+echo -n ✔️
+
+ENV test: ✔️
+env | grep "OLD" | cat ✔️
+env ✔️
+
+EXPORT test:
+export MYVAR=hello
+export MYVAR=world
+export 1ABC=bad
+export MYEMPTY=
+export MYEMPTY=
+export =FOO
+export 9VAR=xx
+export MY-VAR=xx

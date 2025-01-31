@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:54:20 by nlouis            #+#    #+#             */
-/*   Updated: 2024/12/02 12:05:57 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/01/31 10:36:35 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	format_and_print_u(t_fmt *fmt, va_list *args, t_pf *pf)
 		return ;
 }
 
-void	format_and_print_x(t_fmt *fmt, va_list *args, int uppercase, t_pf *pf)
+void	format_and_print_x(t_fmt *fmt, va_list *args, int upper, t_pf *pf)
 {
 	unsigned int	num;
 	char			*str;
