@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 09:12:11 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/31 21:29:41 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/01 18:55:13 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	read_heredoc_into_pipe(int write_fd, const char *delimiter)
 	{
 		line = readline(BOLD_BLUE "heredoc🔹> " RESET);
 		if (!line || ft_strcmp(line, delimiter) == 0)
-			break;
+			break ;
 		write(write_fd, line, ft_strlen(line));
 		write(write_fd, "\n", 1);
 		free(line);
@@ -31,7 +31,7 @@ static void	read_heredoc_into_pipe(int write_fd, const char *delimiter)
 
 static int	handle_heredoc(t_ms *ms, t_cmd *cmd)
 {
-	int heredoc_pipe[2];
+	int	heredoc_pipe[2];
 
 	(void)ms;
 	if (pipe(heredoc_pipe) == -1)

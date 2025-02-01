@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 20:39:19 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/01 09:23:04 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/01 19:01:12 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	collapse_dq_seg(t_ms *ms, const char *input, int *i, char **buffer)
 	if (!raw_content)
 		error(ms, "malloc failed in parse_dq_seg");
 	(*i)++;
-	expanded = expand_in_double_quote(ms, raw_content);
+	expanded = expand_env_var(ms, raw_content);
 	free(raw_content);
 	append_and_replace_buffer(ms, buffer, expanded);
 }
@@ -118,7 +118,7 @@ void	collapse_uq_seg(t_ms *ms, const char *input, int *i, char **buffer)
 	while (input[*i])
 	{
 		if (should_break_unquoted(input, i) == true)
-		break ;
+			break ;
 		(*i)++;
 	}
 	if (start == *i)
@@ -126,7 +126,7 @@ void	collapse_uq_seg(t_ms *ms, const char *input, int *i, char **buffer)
 	raw_content = ft_substr(input, start, (*i - start));
 	if (!raw_content)
 		error(ms, "ft_substr failed in parse_uq_seg");
-	expanded = expand_env_in_word(ms, raw_content);
+	expanded = expand_env_var(ms, raw_content);
 	free(raw_content);
 	append_and_replace_buffer(ms, buffer, expanded);
 }

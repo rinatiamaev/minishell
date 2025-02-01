@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:27:36 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/31 21:08:06 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/01 19:00:46 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ int		process_input(t_ms *ms);
 t_tk	**lexer(t_ms *ms, const char *input);
 
 // Create token in lexer
+t_tk	**initialize_tks(t_ms *ms);
 t_tk	*create_tk(t_ms *ms, t_tk_type type, char *value);
 int		ft_is_operator(const char *input, int i);
 void	collapse_sq_seg(t_ms *ms, const char *input, int *i, char **buffer);
@@ -94,8 +95,7 @@ t_tk	*create_redirect_output_tk(t_ms *ms, int *i);
 t_tk	*create_append_output_tk(t_ms *ms, int *i);
 
 // Expand variable in lexer
-char	*expand_env_in_word(t_ms *ms, const char *content);
-char	*expand_in_double_quote(t_ms *ms, const char *content);
+char	*expand_env_var(t_ms *ms, const char *content);
 
 // Utilities for expand variable in lexer
 char	*expand_exit_status(t_ms *ms, int exit_status);
@@ -116,7 +116,6 @@ void	execute_cmd(t_ms *ms, t_cmd *cmd);
 void	execute_builtin_cmd(t_ms *ms, t_cmd *cmd);
 void	child_process(t_ms *ms, int prev_fd, int next_fd, t_cmd *cmd);
 int		setup_redirections(t_cmd *cmd);
-int		setup_heredoc_in_child(t_cmd *cmd);
 
 bool	validate_cmds(t_ms *ms, t_cmd *cmd, char **envp);
 bool	is_external(t_ms *ms, t_cmd *cmd, char *cmd_name);

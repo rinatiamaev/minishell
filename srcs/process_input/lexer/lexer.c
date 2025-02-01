@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:20:10 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/31 21:09:00 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/01 18:56:09 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,20 +36,20 @@ static char	*collapse_token(t_ms *ms, const char *input, int *i)
 static t_tk	*create_op_tk(t_ms *ms, const char *input, int *i, int op_len)
 {
 	if (input[*i] == '|')
-		return create_pipe_tk(ms, i);
+		return (create_pipe_tk(ms, i));
 	else if (input[*i] == '<')
 	{
 		if (op_len == 2)
-			return create_heredoc_tk(ms, i);
+			return (create_heredoc_tk(ms, i));
 		else
-			return create_redirect_input_tk(ms, i);
+			return (create_redirect_input_tk(ms, i));
 	}
 	else if (input[*i] == '>')
 	{
 		if (op_len == 2)
-			return create_append_output_tk(ms, i);
+			return (create_append_output_tk(ms, i));
 		else
-			return create_redirect_output_tk(ms, i);
+			return (create_redirect_output_tk(ms, i));
 	}
 	return (NULL);
 }
@@ -105,16 +105,6 @@ static int	tkize_input(t_ms *ms, t_tk **tks, const char *input)
 	}
 	tks[tk_index] = NULL;
 	return (0);
-}
-
-static t_tk	**initialize_tks(t_ms *ms)
-{
-	t_tk	**tks;
-
-	tks = malloc(sizeof(t_tk *) * MAX_TKS);
-	if (!tks)
-		error(ms, "Error malloc failed in initialize_tks()");
-	return (tks);
 }
 
 t_tk	**lexer(t_ms *ms, const char *input)

@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:36:53 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/28 09:39:51 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/01 19:00:55 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,30 +20,7 @@
  *	- otherwise, returns a copy of the original content
  *	- returns the expanded string on success
  */
-char	*expand_env_in_word(t_ms *ms, const char *content)
-{
-	char	*output;
-
-	if (ft_strcmp(content, "$?") == 0)
-		return (expand_exit_status(ms, ms->exit_status));
-	else if (content[0] == '$' && content[1] != '\0')
-		return (expand_env_variable(ms, &content[1]));
-	output = ft_strdup(content);
-	if (!output)
-		error(ms, "Error ft_substr() failed in expand_env_in_word");
-	return (output);
-}
-
-/* expand_in_double_quote()
- *	- handles environment variable expansion (`$VARIABLE`) and literal
- *	text inside the double quotes
- *	- iterates through the content, processing variables and literals:
- *		- variables (`$VAR`) are processed using `process_variable`
- *		- literal segments are handled with `process_literal`
- *	- combines expanded variables and literals into a single string
- *	- returns string with all variables expanded
- */
-char	*expand_in_double_quote(t_ms *ms, const char *content)
+char	*expand_env_var(t_ms *ms, const char *content)
 {
 	char	*output;
 	char	*tmp;
@@ -52,7 +29,7 @@ char	*expand_in_double_quote(t_ms *ms, const char *content)
 
 	output = ft_strdup("");
 	if (!output)
-		error(ms, "Error ft_strdup() failed in expand_in_double_quote");
+		error(ms, "Error ft_strdup() failed in expand_env_in_word");
 	i = 0;
 	while (content[i] != '\0')
 	{
@@ -62,7 +39,7 @@ char	*expand_in_double_quote(t_ms *ms, const char *content)
 			processed = process_literal(ms, content, &i);
 		tmp = ft_strjoin(output, processed);
 		if (!tmp)
-			error(ms, "Error ft_strjoin() failed in expand_in_double_quote");
+			error(ms, "Error ft_strjoin() failed in expand_env_in_word");
 		free(processed);
 		free(output);
 		output = tmp;
