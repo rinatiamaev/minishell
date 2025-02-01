@@ -1,0 +1,57 @@
+{
+    // This is the version of the debug configuration schema.
+    "version": "0.2.0",
+
+    // An array of configurations. You can have multiple named configurations,
+    // for example, one for "Debug" and another for "Release".
+    "configurations": [
+        {
+            // A friendly name for this configuration (shown in the debug dropdown).
+            "name": "Debug C++ (GDB)",
+
+            // The type of debugger to use for C++ (cppdbg = C++ debugger).
+            "type": "cppdbg",
+
+            // "launch" means you'll launch a local process; "attach" means
+            // you'll attach to an existing process.
+            "request": "launch",
+
+            // The program to debug. This is usually your compiled binary.
+            // For a single-file workspace, it might be something like:
+            //    "${workspaceFolder}/a.out"
+            // or
+            //    "${fileDirname}/a.out"
+            "program": "${workspaceFolder}/minishell",
+
+            // Command-line arguments to pass to your program (if any).
+            "args": [],
+
+            // Tells the debugger whether to break at the entry point of the program.
+            "stopAtEntry": false,
+
+            // The working directory of your program when it starts.
+            "cwd": "${workspaceFolder}",
+
+            // Environment variables for your program (optional).
+            "environment": [],
+
+            // If true, VS Code shows the output in an external console window
+            // instead of the integrated Debug Console. Set to true or false as desired.
+            "externalConsole": false,
+
+            // The type of debugger interface to use.
+            // - GDB on Linux/macOS: "gdb"
+            // - LLDB on macOS: "lldb"
+            // - GDB on Windows (if installed) or "cppvsdbg" for the MSVC debugger on Windows.
+            "MIMode": "gdb",
+
+            // The path to the GDB (or LLDB) executable.
+            // Adjust if your debugger is installed in a custom location.
+            "miDebuggerPath": "/usr/bin/gdb",
+
+            // (Optional) Pre-launch task to build your code before debugging.
+            // Make sure you have defined a matching task in .vscode/tasks.json.
+            // "preLaunchTask": "Build my C++ project"
+        }
+    ]
+}

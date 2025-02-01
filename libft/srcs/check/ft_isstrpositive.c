@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 14:09:44 by nlouis            #+#    #+#             */
-/*   Updated: 2024/11/08 14:15:35 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/01/31 08:03:15 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 int	ft_isstrpositive(char *str)
 {
-	int	value;
+	long long	value;
 
 	if (str == NULL || str[0] == '\0')
 		return (0);
-	value = ft_atoi(str);
+	value = ft_atoll(str);
 	if (value < 0)
 		return (0);
 	return (1);

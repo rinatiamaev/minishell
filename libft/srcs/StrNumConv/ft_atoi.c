@@ -6,33 +6,43 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 21:00:10 by nlouis            #+#    #+#             */
-/*   Updated: 2024/12/11 18:39:25 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/01/31 08:05:20 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_check_overflow(long long num, const char *str, int sign)
+static bool	ft_check_overflow(long long num, char digit, int sign)
 {
-	if (num > (INT_MAX - (*str - '0')) / 10)
+	long long	cutoff;
+
+	if (sign == 1)
+		cutoff = INT_MAX / 10;
+	else
+		cutoff = (-(long long)INT_MIN) / 10;
+	if (sign == 1)
 	{
-		if (sign == 1)
-			return (-1);
-		else
-			return (0);
+		if (num > cutoff || (num == cutoff && (digit - '0') > (INT_MAX % 10)))
+			return (true);
 	}
-	return (1);
+	else
+	{
+		if (-num > -((long long)INT_MIN / 10)
+			|| (-num == -((long long)INT_MIN / 10)
+				&& (digit - '0') > ((-(long long)INT_MIN) % 10)))
+			return (true);
+	}
+	return (false);
 }
 
-int	ft_atoi(const char *str)
+long long	ft_atoi(const char *str)
 {
 	long long	num;
 	int			sign;
-	int			overflow_status;
 
 	num = 0;
 	sign = 1;
-	while (ft_isspace(*str))
+	while (*str && ((*str >= 9 && *str <= 13) || *str == ' '))
 		str++;
 	if (*str == '+' || *str == '-')
 	{
@@ -42,10 +52,9 @@ int	ft_atoi(const char *str)
 	}
 	while (*str && ft_isdigit(*str))
 	{
-		overflow_status = ft_check_overflow(num, str, sign);
-		if (overflow_status != 1)
-			return (overflow_status);
-		num = num * 10 + *str - '0';
+		if (ft_check_overflow(num, *str, sign))
+			return (ATOI_ERROR);
+		num = num * 10 + (*str - '0');
 		str++;
 	}
 	return ((int)num * sign);
