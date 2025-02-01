@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 13:46:04 by riamaev           #+#    #+#             */
-/*   Updated: 2025/01/31 09:11:59 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/01/31 20:03:57 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static	int	validate_exit_args(t_ms *ms, t_cmd *cmd, long long *exit_status)
 		error(ms, "numeric argument required");
 	}
 	exit_status = (long long *)ft_atoll(cmd->args[0]);
-	if (exit_status < 0 || exit_status > (long long *)255)
+	if (exit_status < (long long *)0 || exit_status > (long long *)255)
 	{
 		ms->exit_status = 2;
 		error(ms, "numeric argument between 0 and 255 required");

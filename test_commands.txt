@@ -48,7 +48,7 @@ Double quotes
 - echo "price is $\10" ✔️
 - echo "this is a backslash \\" ✔️
 - echo "   " ?
-- echo "hello "world"" ❌
+- echo "hello "world"" ✔️
 - echo "'single inside double'" ✔️
 - echo "hello" > file.txt ✔️
 - echo "hello" | cat ✔️
@@ -85,31 +85,19 @@ Line 2
 Line 3
 EOF
 
-Redirect output to a file: ls > output.txt
-
-Append output to a file: printf "Appending this line" >> output.txt
-
-Redirect input from a file: cat < input.txt
-
-Redirect input and output: grep "pattern" < input.txt > output.txt
-
-Send output of one command to another: ls | grep "file"
-
-Multiple pipes: cat file.txt | grep "text" | wc -l
-
-Redirect output of a pipeline to a file: ls | grep "file" > filtered.txt
-
-Read input from a file, process it, and save the output: cat < input.txt | sort | uniq > output.txt
-
-Append output of a pipeline to a file: echo "new line" | tee -a file.txt
-
-Write to multiple outputs: printf "This is a test" | tee file1.txt file2.txt
-
-Command with no output (test handling of empty input): true > output.txt
-
-Invalid redirection: ls > /nonexistent_directory/output.txt
-
-Nested pipes: printf "line1\nline2" | grep "line" | wc -l
+ls > output.txt
+printf "Appending this line" >> output.txt
+cat < input.txt
+grep "pattern" < input.txt > output.txt
+ls | grep "file"
+cat file.txt | grep "text" | wc -l
+ls | grep "file" > filtered.txt
+cat < input.txt | sort | uniq > output.txt
+echo "new line" | tee -a file.txt
+printf "This is a test" | tee file1.txt file2.txt
+true > output.txt
+ls > /nonexistent_directory/output.txt
+printf "line1\nline2" | grep "line" | wc -l
 
 EXIT test: ✔️
 exit hello ✔️
@@ -146,3 +134,14 @@ export MYEMPTY=
 export =FOO
 export 9VAR=xx
 export MY-VAR=xx
+
+> file.txt echo "Hello"
+>> file.txt echo "Hello"
+< input.txt cat 
+
+echo ""$USER
+echo """"$USER
+echo			asdf
+echo ""$USER""
+'e'''""''"c"h"""o" ''""$USER
+asdf"fdsa"

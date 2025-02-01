@@ -36,12 +36,12 @@ bool	validate_cmds(t_ms *ms, t_cmd *cmd, char **envp)
 	{
 		if (!cmd->builtin && cmd->path && access(cmd->path, X_OK) != 0)
 		{
-			cmd_err("command not executable");
+			cmd_err(ms, "command not executable");
 			ms->exit_status = 126;
 		}
 		else
 		{
-			cmd_err("command not found");
+			cmd_err(ms, "command not found");
 			ms->exit_status = 127;
 		}
 		return (false);

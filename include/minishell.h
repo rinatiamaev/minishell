@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:27:36 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/31 12:16:15 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/01/31 21:08:06 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,12 +83,15 @@ t_tk	**lexer(t_ms *ms, const char *input);
 
 // Create token in lexer
 t_tk	*create_tk(t_ms *ms, t_tk_type type, char *value);
-t_tk	*create_pipe_tk(t_ms *ms, const char *input, int *i);
-t_tk	*create_redirection_tk(t_ms *ms, const char *input, int *i);
-t_tk	*create_heredoc_tk(t_ms *ms, const char *input, int *i);
-t_tk	*create_single_quote_tk(t_ms *ms, const char *input, int *i);
-t_tk	*create_double_quote_tk(t_ms *ms, const char *input, int *i);
-t_tk	*create_word_tk(t_ms *ms, const char *input, int *i);
+int		ft_is_operator(const char *input, int i);
+void	collapse_sq_seg(t_ms *ms, const char *input, int *i, char **buffer);
+void	collapse_dq_seg(t_ms *ms, const char *input, int *i, char **buffer);
+void	collapse_uq_seg(t_ms *ms, const char *input, int *i, char **buffer);
+t_tk	*create_pipe_tk(t_ms *ms, int *i);
+t_tk	*create_heredoc_tk(t_ms *ms, int *i);
+t_tk	*create_redirect_input_tk(t_ms *ms, int *i);
+t_tk	*create_redirect_output_tk(t_ms *ms, int *i);
+t_tk	*create_append_output_tk(t_ms *ms, int *i);
 
 // Expand variable in lexer
 char	*expand_env_in_word(t_ms *ms, const char *content);
@@ -126,7 +129,7 @@ void	free_all(t_ms *ms);
 
 // ERRORS
 void	syn_err(t_ms *ms, char *error_message);
-void	cmd_err(char *error_message);
+void	cmd_err(t_ms *ms, char *error_message);
 void	builtin_err(t_ms *ms, char *error_message);
 void	error(t_ms *ms, char *error_message);
 

@@ -15,11 +15,12 @@ SRCS =  srcs/builtin/builtin_cd.c \
 		srcs/execute_cmds/setup_redirections/setup_redirections.c \
 		srcs/execute_cmds/child_process.c \
 		srcs/execute_cmds/execute_cmds.c \
-		srcs/process_input/lexer/create_tokens_utils.c \
+		srcs/process_input/lexer/collapse_adjacent_str.c \
+		srcs/process_input/lexer/create_token.c \
 		srcs/process_input/lexer/create_tokens.c \
-		srcs/process_input/lexer/create_word_token.c \
 		srcs/process_input/lexer/expand_variable_utils.c \
 		srcs/process_input/lexer/expand_variable.c \
+		srcs/process_input/lexer/lexer_utils.c \
 		srcs/process_input/lexer/lexer.c \
 		srcs/process_input/parser/parse_redirection.c \
 		srcs/process_input/parser/parser.c \

@@ -6,11 +6,49 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 09:12:11 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/30 13:00:25 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/01/31 21:29:41 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+
+static void	read_heredoc_into_pipe(int write_fd, const char *delimiter)
+{
+	char	*line;
+
+	while (true)
+	{
+		line = readline(BOLD_BLUE "heredoc🔹> " RESET);
+		if (!line || ft_strcmp(line, delimiter) == 0)
+			break;
+		write(write_fd, line, ft_strlen(line));
+		write(write_fd, "\n", 1);
+		free(line);
+	}
+	free(line);
+	close(write_fd);
+}
+
+static int	handle_heredoc(t_ms *ms, t_cmd *cmd)
+{
+	int heredoc_pipe[2];
+
+	(void)ms;
+	if (pipe(heredoc_pipe) == -1)
+	{
+		perror("pipe() for heredoc");
+		return (-1);
+	}
+	read_heredoc_into_pipe(heredoc_pipe[1], cmd->heredoc_delimiter);
+	if (dup2(heredoc_pipe[0], STDIN_FILENO) == -1)
+	{
+		perror("dup2(heredoc_pipe[0])");
+		close(heredoc_pipe[0]);
+		return (-1);
+	}
+	close(heredoc_pipe[0]);
+	return (0);
+}
 
 static int	handle_output_redirection(t_cmd *cmd)
 {
@@ -60,7 +98,12 @@ static int	handle_input_redirection(t_cmd *cmd)
 
 int	setup_redirections(t_cmd *cmd)
 {
-	if (cmd->input_redirect)
+	if (cmd->heredoc_delimiter)
+	{
+		if (handle_heredoc(NULL, cmd) == -1)
+			return (-1);
+	}
+	else if (cmd->input_redirect)
 	{
 		if (handle_input_redirection(cmd) == -1)
 			return (-1);

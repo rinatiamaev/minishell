@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 14:02:19 by riamaev           #+#    #+#             */
-/*   Updated: 2025/01/31 10:37:43 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/01/31 20:03:22 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ void	builtin_cd(t_ms *ms, t_cmd *cmd)
 {
 	const char	*target_dir;
 
+	target_dir = NULL;
 	if (!cmd->args || !cmd->args[0])
 	{
 		target_dir = get_target_dir(ms, target_dir, "HOME");
