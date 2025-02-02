@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 20:39:19 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/01 19:01:12 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/02 19:06:59 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 **   - No expansions inside single quotes.
 **   - Append the extracted literal to 'buffer'.
 */
-void	collapse_sq_seg(t_ms *ms, const char *input, int *i, char **buffer)
+void	collapse_sq_seg(t_ms *ms, const char *input, int *i, char **buffer, bool is_heredoc)
 {
 	int		start;
 	char	*literal;
@@ -33,7 +33,10 @@ void	collapse_sq_seg(t_ms *ms, const char *input, int *i, char **buffer)
 		syn_err(ms, "unclosed single quote");
 		return ;
 	}
-	literal = ft_substr(input, start, *i - start);
+	if (is_heredoc)
+		literal = ft_strjoin("'", ft_strjoin(ft_substr(input, start, *i - start), "'"));
+	else
+		literal = ft_substr(input, start, *i - start);
 	if (!literal)
 		error(ms, "malloc failed in parse_sq_seg");
 	(*i)++;
