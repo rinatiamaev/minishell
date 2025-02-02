@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 09:12:11 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/01 18:55:13 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/02 15:33:42 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,24 +29,42 @@ static void	read_heredoc_into_pipe(int write_fd, const char *delimiter)
 	close(write_fd);
 }
 
-static int	handle_heredoc(t_ms *ms, t_cmd *cmd)
+int	handle_heredoc(t_ms *ms, t_cmd *cmd, t_tk **tks)
 {
-	int	heredoc_pipe[2];
+	int		heredoc_pipes[10][2];
+	int		heredoc_count = 0;
+	int		prev_pipe_fd = -1;
+	int		i = 0;
 
 	(void)ms;
-	if (pipe(heredoc_pipe) == -1)
+	while (tks[i])
 	{
-		perror("pipe() for heredoc");
-		return (-1);
+		if (tks[i]->type == TK_HEREDOC)
+		{
+			if (pipe(heredoc_pipes[heredoc_count]) == -1)
+			{
+				perror("pipe() for heredoc");
+				return (-1);
+			}
+			read_heredoc_into_pipe(heredoc_pipes[heredoc_count][1], tks[i + 1]->value);
+			close(heredoc_pipes[heredoc_count][1]);
+			prev_pipe_fd = heredoc_pipes[heredoc_count][0];
+			heredoc_count++;
+			free(cmd->heredoc_delimiter);
+			cmd->heredoc_delimiter = ft_strdup(tks[i + 1]->value);
+		}
+		i++;
 	}
-	read_heredoc_into_pipe(heredoc_pipe[1], cmd->heredoc_delimiter);
-	if (dup2(heredoc_pipe[0], STDIN_FILENO) == -1)
+	if (prev_pipe_fd != -1)
 	{
-		perror("dup2(heredoc_pipe[0])");
-		close(heredoc_pipe[0]);
-		return (-1);
+		if (dup2(prev_pipe_fd, STDIN_FILENO) == -1)
+		{
+			perror("dup2() failed for heredoc");
+			close(prev_pipe_fd);
+			return (-1);
+		}
+		close(prev_pipe_fd);
 	}
-	close(heredoc_pipe[0]);
 	return (0);
 }
 
@@ -96,14 +114,10 @@ static int	handle_input_redirection(t_cmd *cmd)
 	return (0);
 }
 
-int	setup_redirections(t_cmd *cmd)
+int	setup_redirections(t_ms *ms, t_cmd *cmd)
 {
-	if (cmd->heredoc_delimiter)
-	{
-		if (handle_heredoc(NULL, cmd) == -1)
-			return (-1);
-	}
-	else if (cmd->input_redirect)
+	(void)ms;
+	if (cmd->input_redirect)
 	{
 		if (handle_input_redirection(cmd) == -1)
 			return (-1);

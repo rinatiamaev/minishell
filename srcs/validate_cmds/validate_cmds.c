@@ -32,6 +32,8 @@ bool	validate_cmds(t_ms *ms, t_cmd *cmd, char **envp)
 {
 	if (!cmd)
 		return (true);
+	if (!cmd->name && cmd->heredoc_delimiter)
+		return (true);
 	if (!is_cmd_valid(ms, cmd))
 	{
 		if (!cmd->builtin && cmd->path && access(cmd->path, X_OK) != 0)

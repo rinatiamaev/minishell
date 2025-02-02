@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:30:35 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/01 09:23:23 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/02 14:10:33 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,12 @@
 
 t_tk	*create_pipe_tk(t_ms *ms, int *i)
 {
-	if (*i == 0)
-	{
-		syn_err(ms, "'|' cannot be the first element");
-		return (NULL);
-	}
 	(*i)++;
 	return (create_tk(ms, TK_PIPE, "|"));
 }
 
 t_tk	*create_heredoc_tk(t_ms *ms, int *i)
 {
-	if (*i == 0)
-	{
-		syn_err(ms, "'<<' cannot be first element");
-		return (NULL);
-	}
 	*i += 2;
 	return (create_tk(ms, TK_HEREDOC, "<<"));
 }

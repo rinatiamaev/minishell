@@ -11,7 +11,6 @@ SRCS =  srcs/builtin/builtin_cd.c \
 		srcs/builtin/builtin_unset.c \
 		srcs/builtin/export/builtin_export.c \
 		srcs/builtin/export/export_utils.c \
-		srcs/execute_cmds/setup_redirections/handle_heredoc_redirection.c \
 		srcs/execute_cmds/setup_redirections/setup_redirections.c \
 		srcs/execute_cmds/child_process.c \
 		srcs/execute_cmds/execute_cmds.c \

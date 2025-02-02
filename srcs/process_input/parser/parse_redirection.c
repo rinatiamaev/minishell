@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:43:40 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/31 21:41:43 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/02 14:57:05 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ static int	parse_heredoc(t_ms *ms, t_cmd *cmd, t_tk **tks, int *i)
 		syn_err(ms, "invalid tk after '<<'");
 		return (-1);
 	}
+	free(cmd->heredoc_delimiter);
 	cmd->heredoc_delimiter = ft_strdup(tks[*i]->value);
 	if (!cmd->heredoc_delimiter)
 		error(ms, "Error ft_strdup() failed in parse_heredoc");

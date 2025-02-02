@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 16:25:47 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/30 12:43:56 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/02 14:25:58 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	execute_builtin_without_pipe(t_ms *ms, t_cmd *cmd)
 	stdout_backup = dup(STDOUT_FILENO);
 	if (stdin_backup == -1 || stdout_backup == -1)
 		error(ms, "dup() failed in execute_cmd");
-	if (setup_redirections(cmd) == -1)
+	if (setup_redirections(ms, cmd) == -1)
 		ms->exit_status = 1;
 	else
 		execute_builtin_cmd(ms, cmd);
