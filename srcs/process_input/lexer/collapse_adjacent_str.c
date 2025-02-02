@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 20:39:19 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/02 19:06:59 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/02 20:14:36 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	collapse_sq_seg(t_ms *ms, const char *input, int *i, char **buffer, bool is
 {
 	int		start;
 	char	*literal;
+	char	*temp;
 	char	*joined;
 
 	(*i)++;
@@ -33,13 +34,17 @@ void	collapse_sq_seg(t_ms *ms, const char *input, int *i, char **buffer, bool is
 		syn_err(ms, "unclosed single quote");
 		return ;
 	}
-	if (is_heredoc)
-		literal = ft_strjoin("'", ft_strjoin(ft_substr(input, start, *i - start), "'"));
-	else
-		literal = ft_substr(input, start, *i - start);
+	literal = ft_substr(input, start, *i - start);
 	if (!literal)
 		error(ms, "malloc failed in parse_sq_seg");
 	(*i)++;
+	if (is_heredoc)
+	{
+		temp = ft_strjoin(literal, "'");
+		free(literal);
+		literal = ft_strjoin("'", temp);
+		free(temp);
+	}
 	joined = ft_strjoin(*buffer, literal);
 	if (!joined)
 		error(ms, "malloc failed in parse_sq_seg (join)");
