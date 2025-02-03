@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 13:46:04 by riamaev           #+#    #+#             */
-/*   Updated: 2025/02/03 10:06:02 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/03 10:05:02 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ void	builtin_exit(t_ms *ms, t_cmd *cmd)
 
 	if (!cmd->args || !cmd->args[0])
 	{
-		ft_putstr_fd(BOLD_BLUE "👋 minishell🔹 Exit\n" RESET, STDOUT_FILENO);
+		ft_putstr_fd(BOLD_BLUE "👋 minishell🔹 Exit\n" \
+		RESET, STDOUT_FILENO);
 		exit_status = ms->exit_status;
 		free_all(ms);
 		exit(exit_status);

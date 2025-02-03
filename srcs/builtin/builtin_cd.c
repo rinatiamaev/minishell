@@ -63,7 +63,10 @@ const char	*get_target_dir(t_ms *ms, const char *var)
 	target_dir = getenv(var);
 	if (!target_dir)
 	{
-		builtin_err(ms, ft_strcmp(var, "HOME") == 0 ? "HOME not set" : "OLDPWD not set");
+		if (ft_strcmp(var, "HOME") == 0)
+			builtin_err(ms, "HOME not set");
+		else
+			builtin_err(ms, "OLDPWD not set");
 		ms->exit_status = 1;
 		return (NULL);
 	}
@@ -86,7 +89,7 @@ void	builtin_cd(t_ms *ms, t_cmd *cmd)
 	{
 		target_dir = get_target_dir(ms, "OLDPWD");
 		if (!target_dir)
-			return;
+			return ;
 		printf("%s\n", target_dir);
 	}
 	else
