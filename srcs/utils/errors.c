@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 08:54:46 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/01 09:23:10 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/03 08:48:24 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	error(t_ms *ms, char *error_message)
 	if (ms)
 		free_all(ms);
 	rl_clear_history();
-	exit(ms->exit_status);
+	exit(1);
 }
 
 void	builtin_err(t_ms *ms, char *error_message)

@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 20:39:19 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/01 09:23:04 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/03 12:44:39 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,11 @@
 **   - No expansions inside single quotes.
 **   - Append the extracted literal to 'buffer'.
 */
-void	collapse_sq_seg(t_ms *ms, const char *input, int *i, char **buffer)
+void	collapse_sq_seg(t_ms *ms, const char *input, int *i, char **buffer, bool is_heredoc)
 {
 	int		start;
 	char	*literal;
+	char	*temp;
 	char	*joined;
 
 	(*i)++;
@@ -37,6 +38,13 @@ void	collapse_sq_seg(t_ms *ms, const char *input, int *i, char **buffer)
 	if (!literal)
 		error(ms, "malloc failed in parse_sq_seg");
 	(*i)++;
+	if (is_heredoc)
+	{
+		temp = ft_strjoin(literal, "'");
+		free(literal);
+		literal = ft_strjoin("'", temp);
+		free(temp);
+	}
 	joined = ft_strjoin(*buffer, literal);
 	if (!joined)
 		error(ms, "malloc failed in parse_sq_seg (join)");
@@ -82,7 +90,7 @@ void	collapse_dq_seg(t_ms *ms, const char *input, int *i, char **buffer)
 	if (!raw_content)
 		error(ms, "malloc failed in parse_dq_seg");
 	(*i)++;
-	expanded = expand_in_double_quote(ms, raw_content);
+	expanded = expand_env_var(ms, raw_content);
 	free(raw_content);
 	append_and_replace_buffer(ms, buffer, expanded);
 }
@@ -118,7 +126,7 @@ void	collapse_uq_seg(t_ms *ms, const char *input, int *i, char **buffer)
 	while (input[*i])
 	{
 		if (should_break_unquoted(input, i) == true)
-		break ;
+			break ;
 		(*i)++;
 	}
 	if (start == *i)
@@ -126,7 +134,7 @@ void	collapse_uq_seg(t_ms *ms, const char *input, int *i, char **buffer)
 	raw_content = ft_substr(input, start, (*i - start));
 	if (!raw_content)
 		error(ms, "ft_substr failed in parse_uq_seg");
-	expanded = expand_env_in_word(ms, raw_content);
+	expanded = expand_env_var(ms, raw_content);
 	free(raw_content);
 	append_and_replace_buffer(ms, buffer, expanded);
 }

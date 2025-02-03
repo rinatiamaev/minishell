@@ -6,13 +6,13 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:20:10 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/31 21:09:00 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/02 19:54:06 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*collapse_token(t_ms *ms, const char *input, int *i)
+static char	*collapse_token(t_ms *ms, const char *input, int *i, bool is_heredoc)
 {
 	char	*word;
 
@@ -24,7 +24,7 @@ static char	*collapse_token(t_ms *ms, const char *input, int *i)
 		if (ft_isspace(input[*i]) || ft_is_operator(input, *i) > 0)
 			break ;
 		if (input[*i] == '\'')
-			collapse_sq_seg(ms, input, i, &word);
+			collapse_sq_seg(ms, input, i, &word, is_heredoc);
 		else if (input[*i] == '"')
 			collapse_dq_seg(ms, input, i, &word);
 		else
@@ -36,25 +36,25 @@ static char	*collapse_token(t_ms *ms, const char *input, int *i)
 static t_tk	*create_op_tk(t_ms *ms, const char *input, int *i, int op_len)
 {
 	if (input[*i] == '|')
-		return create_pipe_tk(ms, i);
+		return (create_pipe_tk(ms, i));
 	else if (input[*i] == '<')
 	{
 		if (op_len == 2)
-			return create_heredoc_tk(ms, i);
+			return (create_heredoc_tk(ms, i));
 		else
-			return create_redirect_input_tk(ms, i);
+			return (create_redirect_input_tk(ms, i));
 	}
 	else if (input[*i] == '>')
 	{
 		if (op_len == 2)
-			return create_append_output_tk(ms, i);
+			return (create_append_output_tk(ms, i));
 		else
-			return create_redirect_output_tk(ms, i);
+			return (create_redirect_output_tk(ms, i));
 	}
 	return (NULL);
 }
 
-static t_tk	*create_next_tk(t_ms *ms, const char *input, int *i)
+static t_tk	*create_next_tk(t_ms *ms, const char *input, int *i, bool *is_heredoc)
 {
 	t_tk	*tk;
 	int		op_len;
@@ -67,11 +67,16 @@ static t_tk	*create_next_tk(t_ms *ms, const char *input, int *i)
 	if (op_len > 0)
 	{
 		tk = create_op_tk(ms, input, i, op_len);
+		if (tk->type == TK_HEREDOC)
+			*is_heredoc = true;
+		else
+			*is_heredoc = false;
 		return (tk);
 	}
 	else
 	{
-		word = collapse_token(ms, input, i);
+		word = collapse_token(ms, input, i, *is_heredoc);
+		*is_heredoc = false;
 		if (!word || !*word)
 		{
 			free(word);
@@ -88,6 +93,7 @@ static int	tkize_input(t_ms *ms, t_tk **tks, const char *input)
 	int		i;
 	int		tk_index;
 	t_tk	*tk;
+	bool	is_heredoc_mode = false;
 
 	i = 0;
 	tk_index = 0;
@@ -97,7 +103,7 @@ static int	tkize_input(t_ms *ms, t_tk **tks, const char *input)
 		skip_whitespace_index(input, &i);
 		if (input[i] == '\0')
 			break ;
-		tk = create_next_tk(ms, input, &i);
+		tk = create_next_tk(ms, input, &i, &is_heredoc_mode);
 		if (!tk)
 			return (-1);
 		tks[tk_index++] = tk;
@@ -105,16 +111,6 @@ static int	tkize_input(t_ms *ms, t_tk **tks, const char *input)
 	}
 	tks[tk_index] = NULL;
 	return (0);
-}
-
-static t_tk	**initialize_tks(t_ms *ms)
-{
-	t_tk	**tks;
-
-	tks = malloc(sizeof(t_tk *) * MAX_TKS);
-	if (!tks)
-		error(ms, "Error malloc failed in initialize_tks()");
-	return (tks);
 }
 
 t_tk	**lexer(t_ms *ms, const char *input)

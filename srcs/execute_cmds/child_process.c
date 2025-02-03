@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:00:13 by riamaev           #+#    #+#             */
-/*   Updated: 2025/02/01 09:23:50 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/03 12:59:27 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,14 @@ void	child_process(t_ms *ms, int prev_fd, int next_fd, t_cmd *cmd)
 {
 	char	**argv;
 
+	if (prev_fd == -1 && cmd->heredoc_delimiter)
+	{
+		if (handle_heredoc(ms, cmd, ms->tks) == -1)
+			exit(ms->exit_status = 1);
+	}
 	if (setup_pipe_redirection(prev_fd, next_fd) == -1)
 		exit(ms->exit_status = 1);
-	if (setup_redirections(cmd) == -1)
+	if (setup_redirections(ms, cmd) == -1)
 		exit(ms->exit_status = 1);
 	if (cmd->builtin)
 	{
@@ -89,6 +94,13 @@ void	child_process(t_ms *ms, int prev_fd, int next_fd, t_cmd *cmd)
 		exit(ms->exit_status);
 	}
 	argv = setup_argv(ms, cmd);
+	if (!argv)
+		exit(ms->exit_status = 1);
+	if (!cmd->path)
+	{
+		free(argv);
+		exit(ms->exit_status = 127);
+	}
 	if (execve(cmd->path, argv, ms->envp) == -1)
 	{
 		perror("execve() failed");

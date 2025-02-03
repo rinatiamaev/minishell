@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:41:40 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/28 10:26:18 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/01 19:46:26 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,11 @@ char	*expand_env_variable(t_ms *ms, const char *content)
 
 	value = get_env_variable(ms, content);
 	if (!value)
+	{
 		value = ft_strdup("");
-	if (!value)
-		error(ms, "ft_strdup() failed in expand_env_variable()");
+		if (!value)
+			error(ms, "ft_strdup() failed in expand_env_variable()");
+	}
 	return (value);
 }
 

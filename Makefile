@@ -11,7 +11,6 @@ SRCS =  srcs/builtin/builtin_cd.c \
 		srcs/builtin/builtin_unset.c \
 		srcs/builtin/export/builtin_export.c \
 		srcs/builtin/export/export_utils.c \
-		srcs/execute_cmds/setup_redirections/handle_heredoc_redirection.c \
 		srcs/execute_cmds/setup_redirections/setup_redirections.c \
 		srcs/execute_cmds/child_process.c \
 		srcs/execute_cmds/execute_cmds.c \
@@ -31,7 +30,7 @@ SRCS =  srcs/builtin/builtin_cd.c \
 		srcs/validate_cmds/is_builtin.c \
 		srcs/validate_cmds/is_external.c \
 		srcs/validate_cmds/validate_cmds.c \
-		srcs/main.c 
+		srcs/main.c
 
 OBJSDIR = objs
 OBJS   = $(addprefix $(OBJSDIR)/,$(SRCS:.c=.o))

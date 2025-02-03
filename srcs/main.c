@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:27:16 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/31 07:33:16 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/03 09:03:14 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,5 @@ int	main(int argc, char **argv, char **envp)
 		set_signals_interactive();
 		reset_prompt(ms);
 	}
-	return (ms->exit_status);
+	return (0);
 }
