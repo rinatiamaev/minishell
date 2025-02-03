@@ -76,7 +76,6 @@ static void	parse_word(t_ms *ms, t_cmd *cmd, t_tk *tk)
 		cmd->args = new_args;
 		cmd->args[args_len] = ft_strdup(tk->value);
 		if (!cmd->args[args_len])
-		if (!cmd->args[args_len])
 		{
 			free(cmd->args[args_len]);
 			error(ms, "Error: ft_strdup() failed in parse_word()");

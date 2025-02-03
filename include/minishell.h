@@ -85,7 +85,8 @@ t_tk	**lexer(t_ms *ms, const char *input);
 t_tk	**initialize_tks(t_ms *ms);
 t_tk	*create_tk(t_ms *ms, t_tk_type type, char *value);
 int		ft_is_operator(const char *input, int i);
-void	collapse_sq_seg(t_ms *ms, const char *input, int *i, char **buffer, bool is_heredoc);
+void	collapse_sq_seg(t_ms *ms, const char *input, int *i, char **buffer, \
+		bool is_heredoc);
 void	collapse_dq_seg(t_ms *ms, const char *input, int *i, char **buffer);
 void	collapse_uq_seg(t_ms *ms, const char *input, int *i, char **buffer);
 t_tk	*create_pipe_tk(t_ms *ms, int *i);
