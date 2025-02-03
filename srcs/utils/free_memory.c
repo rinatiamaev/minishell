@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 19:20:21 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/02 14:19:25 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/03 13:45:46 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,6 @@ void	free_all(t_ms *ms)
 	free_tks(ms->tks);
 	free_cmd(ms->cmd);
 	ft_free_array((void *)ms->envp);
+	rl_clear_history();
 	free(ms);
 }

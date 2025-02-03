@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 18:05:21 by riamaev           #+#    #+#             */
-/*   Updated: 2025/01/31 13:15:49 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/03 14:10:52 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ static int	update_existing_env(t_ms *ms, const char *var)
 	{
 		free(ms->envp[index]);
 		ms->envp[index] = ft_strdup(var);
+		if (!ms->envp[index])
+			error(ms, "ft_strdup() failed");
 		return (1);
 	}
 	return (0);

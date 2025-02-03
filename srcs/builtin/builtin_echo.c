@@ -12,13 +12,6 @@
 
 #include "minishell.h"
 
-/*
-function is_n_flag checks if an argument starts with - followed by
-only n characters. builtin_echo prints arguments, 
-skipping the -n flag, and conditionally adds 
-newline unless the flag is present.
-*/
-
 static bool	is_n_flag(const char *arg)
 {
 	int	i;
@@ -37,19 +30,20 @@ static bool	is_n_flag(const char *arg)
 
 void	builtin_echo(t_ms *ms, t_cmd *cmd)
 {
-	int		i;
-	bool	no_newline;
+	int		i = 0;
+	bool	no_newline = false;
 
 	if (!cmd->args || !cmd->args[0])
 	{
 		printf("\n");
 		ms->exit_status = 0;
-		return ;
+		return;
 	}
-	i = -1;
-	no_newline = false;
-	while (cmd->args[++i] && is_n_flag(cmd->args[i]))
+	while (cmd->args[i] && is_n_flag(cmd->args[i]))
+	{
 		no_newline = true;
+		i++;
+	}
 	while (cmd->args[i])
 	{
 		printf("%s", cmd->args[i]);
@@ -59,5 +53,6 @@ void	builtin_echo(t_ms *ms, t_cmd *cmd)
 	}
 	if (!no_newline)
 		printf("\n");
+
 	ms->exit_status = 0;
 }

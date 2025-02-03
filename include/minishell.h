@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:27:36 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/02 19:08:59 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/03 10:57:30 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,13 +140,9 @@ void	builtin_pwd(t_ms *ms);
 void	builtin_unset(t_ms *ms, t_cmd *cmd);
 void	builtin_env(t_ms *ms);
 void	builtin_exit(t_ms *ms, t_cmd *cmd);
-void	builtin_export(t_ms *ms, t_cmd *cmd);// double check maybe not work
+void	builtin_export(t_ms *ms, t_cmd *cmd);
 
-/* Prototypes for processing */
-/* void	process_env_var_with_equal(t_ms *ms, const char *arg);
-void	process_valid_identifier(t_ms *ms, const char *arg); */
-
-/* Prototypes for export utility functions */
+// Prototypes for export utility functions
 bool	is_valid_identifier(const char *name);
 void	export_err(t_ms *ms, const char *arg, char *error_message);
 void	add_or_update_env(t_ms *ms, const char *var);

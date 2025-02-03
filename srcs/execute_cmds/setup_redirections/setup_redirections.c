@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 09:12:11 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/02 20:10:09 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/03 13:52:36 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ static char	*dequote_delimiter(char *delimiter)
 
 static bool	is_quoted_delimiter(char *delimiter)
 {
-	if (!delimiter || !*delimiter)
+	int len;
+
+	len = ft_strlen(delimiter);
+	if (!delimiter || len < 2)
 		return (false);
 	if ((delimiter[0] == '\'' && delimiter[ft_strlen(delimiter) - 1] == '\'')
 		|| (delimiter[0] == '"' && delimiter[ft_strlen(delimiter) - 1] == '"'))
@@ -73,8 +76,7 @@ static void	read_heredoc_in_pipe(t_ms *ms, int write_fd, char *delimiter)
 
 int	handle_heredoc(t_ms *ms, t_cmd *cmd, t_tk **tks)
 {
-	int		heredoc_pipes[10][2];
-	int		heredoc_count = 0;
+	int		heredoc_pipe[2];
 	int		prev_pipe_fd = -1;
 	int		i = 0;
 
@@ -83,19 +85,35 @@ int	handle_heredoc(t_ms *ms, t_cmd *cmd, t_tk **tks)
 	{
 		if (tks[i]->type == TK_HEREDOC)
 		{
-			if (pipe(heredoc_pipes[heredoc_count]) == -1)
+			if (pipe(heredoc_pipe) == -1)
 			{
 				perror("pipe() for heredoc");
 				return (-1);
 			}
-			read_heredoc_in_pipe(ms, heredoc_pipes[heredoc_count][1], tks[i + 1]->value);
-			close(heredoc_pipes[heredoc_count][1]);
-			prev_pipe_fd = heredoc_pipes[heredoc_count][0];
-			heredoc_count++;
-			free(cmd->heredoc_delimiter);
+			read_heredoc_in_pipe(ms, heredoc_pipe[1], tks[i + 1]->value);
+			close(heredoc_pipe[1]);
+			prev_pipe_fd = heredoc_pipe[0];
+			if (cmd->heredoc_delimiter)
+			{
+				free(cmd->heredoc_delimiter);
+				cmd->heredoc_delimiter = NULL;
+			}
 			cmd->heredoc_delimiter = ft_strdup(tks[i + 1]->value);
 		}
 		i++;
+	}
+	if (!cmd->name)
+	{
+		char buffer[1024];
+		int bytes_read;
+
+		while ((bytes_read = read(prev_pipe_fd, buffer, sizeof(buffer) - 1)) > 0)
+		{
+			buffer[bytes_read] = '\0';
+			printf("%s", buffer);
+		}
+		close(prev_pipe_fd);
+		return (0);
 	}
 	if (prev_pipe_fd != -1)
 	{
@@ -109,6 +127,7 @@ int	handle_heredoc(t_ms *ms, t_cmd *cmd, t_tk **tks)
 	}
 	return (0);
 }
+
 
 static int	handle_output_redirection(t_cmd *cmd)
 {

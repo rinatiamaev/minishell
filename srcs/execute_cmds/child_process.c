@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:00:13 by riamaev           #+#    #+#             */
-/*   Updated: 2025/02/02 15:34:29 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/03 12:59:27 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,11 @@ void	child_process(t_ms *ms, int prev_fd, int next_fd, t_cmd *cmd)
 	argv = setup_argv(ms, cmd);
 	if (!argv)
 		exit(ms->exit_status = 1);
+	if (!cmd->path)
+	{
+		free(argv);
+		exit(ms->exit_status = 127);
+	}
 	if (execve(cmd->path, argv, ms->envp) == -1)
 	{
 		perror("execve() failed");

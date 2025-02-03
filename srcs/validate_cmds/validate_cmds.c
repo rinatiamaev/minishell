@@ -32,7 +32,9 @@ bool	validate_cmds(t_ms *ms, t_cmd *cmd, char **envp)
 {
 	if (!cmd)
 		return (true);
-	if (!cmd->name && cmd->heredoc_delimiter)
+	if ((!cmd->name && cmd->heredoc_delimiter)
+		|| (!cmd->name && cmd->input_redirect)
+		|| (!cmd->name && cmd->output_redirect))
 		return (true);
 	if (!is_cmd_valid(ms, cmd))
 	{

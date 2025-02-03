@@ -6,30 +6,27 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 13:46:04 by riamaev           #+#    #+#             */
-/*   Updated: 2025/01/31 20:03:57 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/03 10:05:02 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static	int	validate_exit_args(t_ms *ms, t_cmd *cmd, long long *exit_status)
+static int	validate_exit_args(t_ms *ms, t_cmd *cmd, long long *exit_status)
 {
-	if (!ft_is_valid_number(cmd->args[0]))
-	{
-		ms->exit_status = 2;
-		error(ms, "numeric argument required");
-	}
-	exit_status = (long long *)ft_atoll(cmd->args[0]);
-	if (exit_status < (long long *)0 || exit_status > (long long *)255)
-	{
-		ms->exit_status = 2;
-		error(ms, "numeric argument between 0 and 255 required");
-	}
 	if (cmd->args[1])
 	{
 		builtin_err(ms, "too many arguments");
 		ms->exit_status = 1;
 		return (-1);
+	}
+	else if (!ft_is_valid_number(cmd->args[0]))
+	{
+		ms->exit_status = 255;
+		builtin_err(ms, "numeric argument required");
+		*exit_status = ms->exit_status;
+		free_all(ms);
+		exit((int)*exit_status);
 	}
 	return (0);
 }
@@ -41,10 +38,14 @@ void	builtin_exit(t_ms *ms, t_cmd *cmd)
 	if (!cmd->args || !cmd->args[0])
 	{
 		ft_putstr_fd(BOLD_BLUE "👋 minishell🔹 Exit\n" RESET, STDOUT_FILENO);
-		exit(ms->exit_status);
+		exit_status = ms->exit_status;
+		free_all(ms);
+		exit(exit_status);
 	}
 	if (validate_exit_args(ms, cmd, &exit_status) == -1)
 		return ;
+	exit_status = ft_atoll(cmd->args[0]);
 	ft_putstr_fd(BOLD_BLUE "👋 minishell🔹 Exit\n" RESET, STDOUT_FILENO);
-	exit((int)exit_status);
+	free_all(ms);
+	exit((int)(exit_status % 256));
 }
