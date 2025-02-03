@@ -42,9 +42,7 @@ void	builtin_echo(t_ms *ms, t_cmd *cmd)
 		return ;
 	}
 	while (cmd->args[i] && is_n_flag(cmd->args[i++]))
-	{
 		no_newline = true;
-	}
 	while (cmd->args[i])
 	{
 		printf("%s", cmd->args[i]);
