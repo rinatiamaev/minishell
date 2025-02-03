@@ -12,7 +12,8 @@
 
 #include "minishell.h"
 
-static char	*collapse_token(t_ms *ms, const char *input, int *i, bool is_heredoc)
+static char	*collapse_token(t_ms *ms, const char *input, \
+			int *i, bool is_heredoc)
 {
 	char	*word;
 
@@ -33,7 +34,8 @@ static char	*collapse_token(t_ms *ms, const char *input, int *i, bool is_heredoc
 	return (word);
 }
 
-static t_tk	*create_op_tk(t_ms *ms, const char *input, int *i, int op_len)
+static t_tk	*create_op_tk(t_ms *ms, const char *input, \
+			int *i, int op_len)
 {
 	if (input[*i] == '|')
 		return (create_pipe_tk(ms, i));
@@ -54,7 +56,8 @@ static t_tk	*create_op_tk(t_ms *ms, const char *input, int *i, int op_len)
 	return (NULL);
 }
 
-static t_tk	*create_next_tk(t_ms *ms, const char *input, int *i, bool *is_heredoc)
+static t_tk	*create_next_tk(t_ms *ms, const char *input, \
+			int *i, bool *is_heredoc)
 {
 	t_tk	*tk;
 	int		op_len;
@@ -93,11 +96,12 @@ static int	tkize_input(t_ms *ms, t_tk **tks, const char *input)
 	int		i;
 	int		tk_index;
 	t_tk	*tk;
-	bool	is_heredoc_mode = false;
+	bool	is_heredoc_mode;
 
 	i = 0;
 	tk_index = 0;
 	tks[tk_index] = NULL;
+	is_heredoc_mode = false;
 	while (input[i] != '\0')
 	{
 		skip_whitespace_index(input, &i);
