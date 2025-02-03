@@ -37,7 +37,8 @@ void	builtin_exit(t_ms *ms, t_cmd *cmd)
 
 	if (!cmd->args || !cmd->args[0])
 	{
-		ft_putstr_fd(BOLD_BLUE "👋 minishell🔹 Exit\n" RESET, STDOUT_FILENO);
+		ft_putstr_fd(BOLD_BLUE "👋 minishell🔹 Exit\n" \
+		RESET, STDOUT_FILENO);
 		exit_status = ms->exit_status;
 		free_all(ms);
 		exit(exit_status);
