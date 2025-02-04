@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:53:00 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/28 08:11:52 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/04 11:25:50 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,14 @@
  *	Explicitly sets SIGQUIT (Ctrl-\) to be ignored by this process.
  *	Typically used in interactive mode so the shell doesn't quit on Ctrl-\.
  */
-static void	ignore_sigquit(void)
+static void	ignore_sigquit(t_ms *ms)
 {
 	struct sigaction	act;
 
 	ft_memset(&act, 0, sizeof(act));
 	act.sa_handler = SIG_IGN;
 	if (sigaction(SIGQUIT, &act, NULL) == -1)
-		perror("sigaction - ignore SIGQUIT");
+		error(ms, "sigaction() failed in ingnore_sigquit()");
 }
 
 /* interactive_sigint_handler()
@@ -51,15 +51,15 @@ static void	interactive_sigint_handler(int signo)
  *		- SIGQUIT (Ctrl-\) is ignored
  *	This mode is enabled when minishell is awaiting user commands.
  */
-void	set_signals_interactive(void)
+void	set_signals_interactive(t_ms *ms)
 {
 	struct sigaction	act;
 
-	ignore_sigquit();
+	ignore_sigquit(ms);
 	ft_memset(&act, 0, sizeof(act));
 	act.sa_handler = interactive_sigint_handler;
 	if (sigaction(SIGINT, &act, NULL) == -1)
-		perror("sigaction - set SIGINT (interactive)");
+		error(ms, "sigaction() failed in set_signals_interactive()");
 }
 
 /* cmd_sig_handler:
@@ -77,14 +77,14 @@ static void	cmd_sig_handler(int signo)
  *	Let the child process handle Ctrl-C, Ctrl-\ signals,
  *	the shell does not react.
  */
-void	set_signals_noninteractive(void)
+void	set_signals_noninteractive(t_ms *ms)
 {
 	struct sigaction	act;
 
 	ft_memset(&act, 0, sizeof(act));
 	act.sa_handler = cmd_sig_handler;
 	if (sigaction(SIGINT, &act, NULL) == -1)
-		perror("sigaction - set SIGINT (non-interactive)");
+		error(ms, "sigaction() failed in set_signals_noninteractive()");
 	if (sigaction(SIGQUIT, &act, NULL) == -1)
-		perror("sigaction - set SIGQUIT (non-interactive)");
+		error(ms, "sigaction() failed in set_signals_noninteractive()");
 }

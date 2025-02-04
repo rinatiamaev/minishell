@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:27:36 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/04 10:10:21 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/04 11:23:54 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,8 @@ t_cmd	*parse_tks(t_ms *ms, t_tk **tks);
 int		parse_redirections(t_ms *ms, t_cmd *cmd, t_tk **tks, int *i);
 
 // SIGNALS
-void	set_signals_noninteractive(void);
-void	set_signals_interactive(void);
+void	set_signals_noninteractive(t_ms *ms);
+void	set_signals_interactive(t_ms *ms);
 
 // EXECUTE COMMANDS
 void	execute_cmd(t_ms *ms, t_cmd *cmd);

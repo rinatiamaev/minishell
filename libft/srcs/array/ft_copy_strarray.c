@@ -6,13 +6,13 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 00:53:03 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/03 01:06:06 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/04 11:16:00 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	**ft_copy_array(char **array)
+char	**ft_copy_strarray(char **array)
 {
 	int		i;
 	int		j;

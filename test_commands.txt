@@ -52,7 +52,7 @@ Double quotes
 - echo "'single inside double'" ✔️
 - echo "hello" > file.txt ✔️
 - echo "hello" | cat ✔️
-- echo hello"world" ❌
+- echo hello"world" ✔️
 
 Unclosed quotes
 - echo "Hello World ✔️

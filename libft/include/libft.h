@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 01:23:16 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/31 10:35:47 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/04 11:16:09 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ typedef struct s_list
 	struct s_list	*next;
 }				t_list;
 
-char		**ft_copy_array(char **array);
+char		**ft_copy_strarray(char **array);
 void		ft_free_array(void **array);
 int			ft_putintarray(int *array, int size);
 char		**ft_split(const char *s, char c);

@@ -6,13 +6,13 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:27:16 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/04 10:32:43 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/04 11:30:41 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	reset_prompt(t_ms *ms)
+static void	reset_prompt(t_ms *ms)
 {
 	free_cmd(ms->cmd);
 	ms->cmd = NULL;
@@ -39,13 +39,12 @@ static t_ms	*setup_minishell(int argc, char **argv, char **envp)
 		exit(EXIT_FAILURE);
 	}
 	(void)argv;
-	ms = malloc(sizeof(t_ms));
+	ms = ft_calloc(1, sizeof(t_ms));
 	if (!ms)
-		error(NULL, "malloc() failed in setup_minishell()");
-	ft_memset(ms, 0, sizeof(t_ms));
-	ms->envp = ft_copy_array(envp);
+		error(NULL, "ft_calloc() failed in setup_minishell()");
+	ms->envp = ft_copy_strarray(envp);
 	if (!ms->envp)
-		error(ms, "ft_copy_array() failed in setup_minishell()");
+		error(ms, "ft_copy_strarray() failed in setup_minishell()");
 	return (ms);
 }
 
@@ -60,18 +59,17 @@ int	main(int argc, char **argv, char **envp)
 	t_ms	*ms;
 
 	ms = setup_minishell(argc, argv, envp);
-	set_signals_interactive();
+	set_signals_interactive(ms);
 	while (true)
 	{
 		if (process_input(ms) == -1)
 		{
-			set_signals_interactive();
 			reset_prompt(ms);
 			continue ;
 		}
-		set_signals_noninteractive();
+		set_signals_noninteractive(ms);
 		execute_cmd(ms, ms->cmd);
-		set_signals_interactive();
+		set_signals_interactive(ms);
 		reset_prompt(ms);
 	}
 	return (0);

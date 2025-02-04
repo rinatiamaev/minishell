@@ -6,13 +6,13 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 08:48:28 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/28 10:28:39 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/04 11:31:34 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	exit_program(t_ms *ms)
+static void	exit_program_ctrld(t_ms *ms)
 {
 	if (ms)
 		free_all(ms);
@@ -27,7 +27,7 @@ static char	*get_input(t_ms *ms)
 
 	input = readline(BOLD_BLUE "💾 minishell🔹 " RESET);
 	if (!input)
-		exit_program(ms);
+		exit_program_ctrld(ms);
 	if (errno)
 		error(ms, "readline() failed in get_input()");
 	if (*input == '\0')
