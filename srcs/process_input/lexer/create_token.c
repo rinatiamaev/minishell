@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:28:16 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/04 10:04:33 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/04 14:28:27 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ t_tk	*create_tk(t_ms *ms, t_tk_type type, char *value)
 	if (!tk)
 		error(ms, "malloc() failed in create_tk()");
 	tk->type = type;
+	tk->is_delimiter = false;
+	tk->delimiter_quoted = false;
 	if (value)
 	{
 		tk->value = ft_strdup(value);

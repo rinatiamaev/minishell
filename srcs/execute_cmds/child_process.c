@@ -6,15 +6,12 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:00:13 by riamaev           #+#    #+#             */
-/*   Updated: 2025/02/03 12:59:27 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/04 15:02:21 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/* setup_argv:
- *  Prepares argv array for execve by combining cmd->name + cmd->args.
- */
 static char	**setup_argv(t_ms *ms, t_cmd *cmd)
 {
 	int		argc;
@@ -27,7 +24,7 @@ static char	**setup_argv(t_ms *ms, t_cmd *cmd)
 	argv = malloc((argc + 2) * sizeof(char *));
 	if (!argv)
 	{
-		write(2, "malloc() failed in setup_argv()", 31);
+		write(2, "malloc() failed in setup_argv()\n", 32);
 		ms->exit_status = 1;
 		return (NULL);
 	}
@@ -42,10 +39,6 @@ static char	**setup_argv(t_ms *ms, t_cmd *cmd)
 	return (argv);
 }
 
-/* setup_pipe_redirection():
- *  If prev_fd != -1, dup2(...) it to STDIN
- *  If next_fd != -1, dup2(...) it to STDOUT
- */
 static int	setup_pipe_redirection(int prev_fd, int next_fd)
 {
 	if (prev_fd != -1)
@@ -69,33 +62,23 @@ static int	setup_pipe_redirection(int prev_fd, int next_fd)
 	return (0);
 }
 
-/* child_process:
- *  1) If we have a heredoc, set it up (pipe + read lines).
- *  2) Setup pipeline bridging (prev_fd->stdin, stdout->next_fd).
- *  3) Setup other redirections (<, >, >>).
- *  4) If builtin, run in child, else execve.
- */
-void	child_process(t_ms *ms, int prev_fd, int next_fd, t_cmd *cmd)
+static int	child_heredoc_if_needed(t_ms *ms, t_cmd *cmd, int prev_fd)
 {
-	char	**argv;
-
 	if (prev_fd == -1 && cmd->heredoc_delimiter)
 	{
 		if (handle_heredoc(ms, cmd, ms->tks) == -1)
-			exit(ms->exit_status = 1);
+			return (-1);
 	}
-	if (setup_pipe_redirection(prev_fd, next_fd) == -1)
-		exit(ms->exit_status = 1);
-	if (setup_redirections(ms, cmd) == -1)
-		exit(ms->exit_status = 1);
+	return (0);
+}
+
+static void	child_exec_builtin_or_command(t_ms *ms, t_cmd *cmd, char **argv)
+{
 	if (cmd->builtin)
 	{
 		execute_builtin_cmd(ms, cmd);
 		exit(ms->exit_status);
 	}
-	argv = setup_argv(ms, cmd);
-	if (!argv)
-		exit(ms->exit_status = 1);
 	if (!cmd->path)
 	{
 		free(argv);
@@ -107,6 +90,22 @@ void	child_process(t_ms *ms, int prev_fd, int next_fd, t_cmd *cmd)
 		free(argv);
 		exit(ms->exit_status = 127);
 	}
+}
+
+void	child_process(t_ms *ms, int prev_fd, int next_fd, t_cmd *cmd)
+{
+	char	**argv;
+
+	if (child_heredoc_if_needed(ms, cmd, prev_fd) == -1)
+		exit(ms->exit_status = 1);
+	if (setup_pipe_redirection(prev_fd, next_fd) == -1)
+		exit(ms->exit_status = 1);
+	if (setup_redirections(ms, cmd) == -1)
+		exit(ms->exit_status = 1);
+	argv = setup_argv(ms, cmd);
+	if (!argv)
+		exit(ms->exit_status = 1);
+	child_exec_builtin_or_command(ms, cmd, argv);
 	free(argv);
 	exit(EXIT_FAILURE);
 }

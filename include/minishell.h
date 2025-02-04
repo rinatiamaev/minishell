@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:27:36 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/04 11:23:54 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/04 15:04:03 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ typedef struct s_tk
 {
 	t_tk_type	type;
 	char		*value;
+	bool		is_delimiter;
+	bool		delimiter_quoted;
 }	t_tk;
 
 typedef struct s_cmd
@@ -75,6 +77,15 @@ typedef struct s_ms
 	t_cmd		*cmd;
 }	t_ms;
 
+typedef struct s_collapse
+{
+	t_ms		*ms;
+	const char	*input;
+	int			*i;
+	char		**buffer;
+	bool		is_delimiter;
+}	t_collapse;
+
 // PROCESS INPUT
 int		process_input(t_ms *ms);
 
@@ -85,10 +96,11 @@ t_tk	**lexer(t_ms *ms, const char *input);
 t_tk	**initialize_tks(t_ms *ms);
 t_tk	*create_tk(t_ms *ms, t_tk_type type, char *value);
 int		ft_is_operator(const char *input, int i);
-void	collapse_sq_seg(t_ms *ms, const char *input, int *i, char **buffer, \
-		bool is_heredoc);
-void	collapse_dq_seg(t_ms *ms, const char *input, int *i, char **buffer);
-void	collapse_uq_seg(t_ms *ms, const char *input, int *i, char **buffer);
+void	detect_quoted_delimiter(t_tk *tk);
+char	*ft_strjoin_free(char *s1, char *s2);
+void	collapse_sq_seg(t_collapse	*col);
+void	collapse_dq_seg(t_collapse	*col);
+void	collapse_uq_seg(t_collapse	*col);
 t_tk	*create_pipe_tk(t_ms *ms, int *i);
 t_tk	*create_heredoc_tk(t_ms *ms, int *i);
 t_tk	*create_redirect_input_tk(t_ms *ms, int *i);
@@ -107,6 +119,7 @@ char	*process_variable(t_ms *ms, const char *content, int *i);
 // PARSER
 t_cmd	*parse_tks(t_ms *ms, t_tk **tks);
 int		parse_redirections(t_ms *ms, t_cmd *cmd, t_tk **tks, int *i);
+void	parse_word(t_ms *ms, t_cmd *cmd, t_tk *tk);
 
 // SIGNALS
 void	set_signals_noninteractive(t_ms *ms);

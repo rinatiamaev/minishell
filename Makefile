@@ -11,6 +11,7 @@ SRCS =  srcs/builtin/builtin_cd.c \
 		srcs/builtin/builtin_unset.c \
 		srcs/builtin/export/builtin_export.c \
 		srcs/builtin/export/export_utils.c \
+		srcs/execute_cmds/setup_redirections/setup_heredoc.c \
 		srcs/execute_cmds/setup_redirections/setup_redirections.c \
 		srcs/execute_cmds/child_process.c \
 		srcs/execute_cmds/execute_cmds.c \
@@ -22,6 +23,7 @@ SRCS =  srcs/builtin/builtin_cd.c \
 		srcs/process_input/lexer/lexer_utils.c \
 		srcs/process_input/lexer/lexer.c \
 		srcs/process_input/parser/parse_redirection.c \
+		srcs/process_input/parser/parse_word.c \
 		srcs/process_input/parser/parser.c \
 		srcs/process_input/process_input.c \
 		srcs/signals/signals.c \

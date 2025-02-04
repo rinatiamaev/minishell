@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 18:32:29 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/03 14:15:38 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/04 14:58:35 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,52 +36,6 @@ static t_cmd	*parse_pipe(t_ms *ms, t_cmd *cmd, t_tk **tks, int *i)
 	if (!cmd->pipe_to)
 		return (NULL);
 	return (cmd);
-}
-
-/* parse_word()
- *	-checks if `cmd->name` is already set:
- *		- if not, assigns the word tk value to `cmd->name`
- *		- allocates memory for the string using `ft_strdup`
- *	- if `cmd->name` is already set:
- *		-treats the word tk as an argument
- *		- calculates the current length of `cmd->args` (the argument array)
- *		- reallocates memory for the argument array to accommodate the new
- *		argument using `ft_realloc`
- *		- appends the new argument to the array.
- *		- ensures the argument array is null-terminated.
- */
-static void	parse_word(t_ms *ms, t_cmd *cmd, t_tk *tk)
-{
-	int		args_len;
-	char	**new_args;
-
-	if (!cmd->name)
-	{
-		cmd->name = ft_strdup(tk->value);
-		if (!cmd->name)
-			error(ms, "Error ft_strdup() failed in parse_word_tk");
-	}
-	else
-	{
-		args_len = 0;
-		while (cmd->args && cmd->args[args_len])
-			args_len++;
-		new_args = ft_realloc(cmd->args, args_len * sizeof(char *),
-				sizeof(char *) * (args_len + 2));
-		if (!new_args)
-		{
-			free(cmd->args);
-			error(ms, "Error: ft_realloc() failed in parse_word()");
-		}
-		cmd->args = new_args;
-		cmd->args[args_len] = ft_strdup(tk->value);
-		if (!cmd->args[args_len])
-		{
-			free(cmd->args[args_len]);
-			error(ms, "Error: ft_strdup() failed in parse_word()");
-		}
-		cmd->args[args_len + 1] = NULL;
-	}
 }
 
 /* initialize_cmd()

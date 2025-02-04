@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 20:39:19 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/03 12:44:39 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/04 14:34:24 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,51 +18,31 @@
 **   - No expansions inside single quotes.
 **   - Append the extracted literal to 'buffer'.
 */
-void	collapse_sq_seg(t_ms *ms, const char *input, int *i, char **buffer, bool is_heredoc)
+void	collapse_sq_seg(t_collapse	*col)
 {
 	int		start;
 	char	*literal;
-	char	*temp;
-	char	*joined;
+	char	*tmp;
 
-	(*i)++;
-	start = *i;
-	while (input[*i] && input[*i] != '\'')
-		(*i)++;
-	if (!input[*i])
+	(*col->i)++;
+	start = *col->i;
+	while (col->input[*col->i] && col->input[*col->i] != '\'')
+		(*col->i)++;
+	if (!col->input[*col->i])
 	{
-		syn_err(ms, "unclosed single quote");
+		syn_err(col->ms, "unclosed single quote");
 		return ;
 	}
-	literal = ft_substr(input, start, *i - start);
+	literal = ft_substr(col->input, start, *col->i - start);
 	if (!literal)
-		error(ms, "malloc failed in parse_sq_seg");
-	(*i)++;
-	if (is_heredoc)
+		error(col->ms, "malloc failed in collapse_sq_seg");
+	(*col->i)++;
+	if (col->is_delimiter)
 	{
-		temp = ft_strjoin(literal, "'");
-		free(literal);
-		literal = ft_strjoin("'", temp);
-		free(temp);
+		tmp = ft_strjoin_free(ft_strdup("'"), literal);
+		literal = ft_strjoin_free(tmp, ft_strdup("'"));
 	}
-	joined = ft_strjoin(*buffer, literal);
-	if (!joined)
-		error(ms, "malloc failed in parse_sq_seg (join)");
-	free(*buffer);
-	free(literal);
-	*buffer = joined;
-}
-
-static void	append_and_replace_buffer(t_ms *ms, char **buffer, char *new_part)
-{
-	char	*joined;
-
-	joined = ft_strjoin(*buffer, new_part);
-	if (!joined)
-		error(ms, "ft_strjoin() failed in append_and_replace_buffer");
-	free(*buffer);
-	free(new_part);
-	*buffer = joined;
+	*col->buffer = ft_strjoin_free(*col->buffer, literal);
 }
 
 /* parse_dq_seg():
@@ -71,28 +51,28 @@ static void	append_and_replace_buffer(t_ms *ms, char **buffer, char *new_part)
 **   - We DO expansions here (like $VAR, $?).
 **   - Append the expanded result to 'buffer'.
 */
-void	collapse_dq_seg(t_ms *ms, const char *input, int *i, char **buffer)
+void	collapse_dq_seg(t_collapse	*col)
 {
 	int		start;
 	char	*raw_content;
 	char	*expanded;
 
-	(*i)++;
-	start = *i;
-	while (input[*i] && input[*i] != '"')
-		(*i)++;
-	if (!input[*i])
+	(*col->i)++;
+	start = *col->i;
+	while (col->input[*col->i] && col->input[*col->i] != '"')
+		(*col->i)++;
+	if (!col->input[*col->i])
 	{
-		syn_err(ms, "unclosed double quote");
+		syn_err(col->ms, "unclosed double quote");
 		return ;
 	}
-	raw_content = ft_substr(input, start, *i - start);
+	raw_content = ft_substr(col->input, start, *col->i - start);
 	if (!raw_content)
-		error(ms, "malloc failed in parse_dq_seg");
-	(*i)++;
-	expanded = expand_env_var(ms, raw_content);
+		error(col->ms, "malloc failed in collapse_dq_seg");
+	(*col->i)++;
+	expanded = expand_env_var(col->ms, raw_content);
 	free(raw_content);
-	append_and_replace_buffer(ms, buffer, expanded);
+	*col->buffer = ft_strjoin_free(*col->buffer, expanded);
 }
 
 static bool	should_break_unquoted(const char *input, int *i)
@@ -116,25 +96,25 @@ static bool	should_break_unquoted(const char *input, int *i)
 **   - Expansions ($VAR, $?) are performed on the unquoted segment.
 **   - Append the expanded text to 'buffer'.
 */
-void	collapse_uq_seg(t_ms *ms, const char *input, int *i, char **buffer)
+void	collapse_uq_seg(t_collapse	*col)
 {
 	int		start;
 	char	*raw_content;
 	char	*expanded;
 
-	start = *i;
-	while (input[*i])
+	start = *col->i;
+	while (col->input[*col->i])
 	{
-		if (should_break_unquoted(input, i) == true)
+		if (should_break_unquoted(col->input, col->i))
 			break ;
-		(*i)++;
+		(*col->i)++;
 	}
-	if (start == *i)
+	if (start == *col->i)
 		return ;
-	raw_content = ft_substr(input, start, (*i - start));
+	raw_content = ft_substr(col->input, start, (*col->i - start));
 	if (!raw_content)
-		error(ms, "ft_substr failed in parse_uq_seg");
-	expanded = expand_env_var(ms, raw_content);
+		error(col->ms, "ft_substr failed in collapse_uq_seg");
+	expanded = expand_env_var(col->ms, raw_content);
 	free(raw_content);
-	append_and_replace_buffer(ms, buffer, expanded);
+	*col->buffer = ft_strjoin_free(*col->buffer, expanded);
 }

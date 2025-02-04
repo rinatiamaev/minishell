@@ -6,30 +6,35 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:20:10 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/04 10:30:30 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/04 14:31:07 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*collapse_token(t_ms *ms, const char *input, \
-			int *i, bool is_heredoc)
+static char	*collapse_token(t_ms *ms, const char *input, int *i, t_tk *tk)
 {
-	char	*word;
+	char		*word;
+	t_collapse	col;
 
 	word = ft_strdup("");
 	if (!word)
 		error(ms, "malloc failed in collapse_token");
-	while (input[*i])
+	col.ms = ms;
+	col.input = input;
+	col.i = i;
+	col.buffer = &word;
+	col.is_delimiter = tk->is_delimiter;
+	while (col.input[*i])
 	{
-		if (ft_isspace(input[*i]) || ft_is_operator(input, *i) > 0)
+		if (ft_isspace(col.input[*i]) || ft_is_operator(col.input, *i) > 0)
 			break ;
-		if (input[*i] == '\'')
-			collapse_sq_seg(ms, input, i, &word, is_heredoc);
-		else if (input[*i] == '"')
-			collapse_dq_seg(ms, input, i, &word);
+		if (col.input[*i] == '\'')
+			collapse_sq_seg(&col);
+		else if (col.input[*i] == '"')
+			collapse_dq_seg(&col);
 		else
-			collapse_uq_seg(ms, input, i, &word);
+			collapse_uq_seg(&col);
 	}
 	return (word);
 }
@@ -56,34 +61,26 @@ static t_tk	*create_op_tk(t_ms *ms, const char *input, \
 	return (NULL);
 }
 
-static t_tk	*create_next_tk(t_ms *ms, const char *input, \
-			int *i, bool *is_heredoc)
+static t_tk	*create_next_tk(t_ms *ms, const char *input, int *i, t_tk *p_token)
 {
 	t_tk	*tk;
 	int		op_len;
-	char	*word;
 
 	skip_whitespace_index(input, i);
 	if (input[*i] == '\0')
 		return (NULL);
 	op_len = ft_is_operator(input, *i);
 	if (op_len > 0)
-	{
 		tk = create_op_tk(ms, input, i, op_len);
-		if (tk->type == TK_HEREDOC)
-			*is_heredoc = true;
-		else
-			*is_heredoc = false;
-		return (tk);
-	}
 	else
 	{
-		word = collapse_token(ms, input, i, *is_heredoc);
-		*is_heredoc = false;
-		tk = create_tk(ms, TK_WORD, word);
-		free(word);
-		return (tk);
+		tk = create_tk(ms, TK_WORD, NULL);
+		tk->is_delimiter = (p_token && p_token->type == TK_HEREDOC);
+		tk->value = collapse_token(ms, input, i, tk);
+		if (tk->is_delimiter)
+			detect_quoted_delimiter(tk);
 	}
+	return (tk);
 }
 
 static int	tkize_input(t_ms *ms, t_tk **tks, const char *input)
@@ -91,18 +88,20 @@ static int	tkize_input(t_ms *ms, t_tk **tks, const char *input)
 	int		i;
 	int		tk_index;
 	t_tk	*tk;
-	bool	is_heredoc_mode;
+	t_tk	*prev_tk;
 
 	i = 0;
 	tk_index = 0;
-	tks[tk_index] = NULL;
-	is_heredoc_mode = false;
 	while (input[i] != '\0')
 	{
 		skip_whitespace_index(input, &i);
 		if (input[i] == '\0')
 			break ;
-		tk = create_next_tk(ms, input, &i, &is_heredoc_mode);
+		if (tk_index == 0)
+			prev_tk = NULL;
+		else
+			prev_tk = tks[tk_index - 1];
+		tk = create_next_tk(ms, input, &i, prev_tk);
 		if (!tk)
 			return (-1);
 		tks[tk_index++] = tk;
