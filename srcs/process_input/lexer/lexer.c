@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:20:10 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/02 19:54:06 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/04 10:30:30 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,6 @@ static t_tk	*create_next_tk(t_ms *ms, const char *input, \
 	{
 		word = collapse_token(ms, input, i, *is_heredoc);
 		*is_heredoc = false;
-		if (!word || !*word)
-		{
-			free(word);
-			return (NULL);
-		}
 		tk = create_tk(ms, TK_WORD, word);
 		free(word);
 		return (tk);

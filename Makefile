@@ -30,7 +30,8 @@ SRCS =  srcs/builtin/builtin_cd.c \
 		srcs/validate_cmds/is_builtin.c \
 		srcs/validate_cmds/is_external.c \
 		srcs/validate_cmds/validate_cmds.c \
-		srcs/main.c
+		srcs/main.c \
+		srcs/debugging_print.c
 
 OBJSDIR = objs
 OBJS   = $(addprefix $(OBJSDIR)/,$(SRCS:.c=.o))

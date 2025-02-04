@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 20:21:20 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/01 18:56:14 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/04 10:11:52 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_tk	**initialize_tks(t_ms *ms)
 {
 	t_tk	**tks;
 
-	tks = malloc(sizeof(t_tk *) * MAX_TKS);
+	tks = ft_calloc(MAX_TKS, sizeof(t_tk *));
 	if (!tks)
 		error(ms, "Error malloc failed in initialize_tks()");
 	return (tks);

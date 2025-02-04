@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:27:36 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/03 10:57:30 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/04 10:10:21 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,5 +147,8 @@ void	builtin_export(t_ms *ms, t_cmd *cmd);
 bool	is_valid_identifier(const char *name);
 void	export_err(t_ms *ms, const char *arg, char *error_message);
 void	add_or_update_env(t_ms *ms, const char *var);
+
+void	print_cmd(t_cmd *cmd, int indent);
+void	print_tks(t_tk **tks);
 
 #endif
