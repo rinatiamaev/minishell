@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 20:39:19 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/04 14:34:24 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/05 13:02:01 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,31 +18,31 @@
 **   - No expansions inside single quotes.
 **   - Append the extracted literal to 'buffer'.
 */
-void	collapse_sq_seg(t_collapse	*col)
+int	collapse_sq_seg(t_ms *ms, int *i, int tk_index)
 {
 	int		start;
 	char	*literal;
 	char	*tmp;
 
-	(*col->i)++;
-	start = *col->i;
-	while (col->input[*col->i] && col->input[*col->i] != '\'')
-		(*col->i)++;
-	if (!col->input[*col->i])
+	(*i)++;
+	start = *i;
+	while (ms->input[*i] && ms->input[*i] != '\'')
+		(*i)++;
+	if (!ms->input[*i])
 	{
-		syn_err(col->ms, "unclosed single quote");
-		return ;
+		syn_err(ms, "unclosed single quote");
+		return (-1);
 	}
-	literal = ft_substr(col->input, start, *col->i - start);
-	if (!literal)
-		error(col->ms, "malloc failed in collapse_sq_seg");
-	(*col->i)++;
-	if (col->is_delimiter)
+	literal = x_substr(ms, ms->input, start, *i - start);
+	(*i)++;
+	if (ms->tks[tk_index]->type == TK_HEREDOC_DELIMITER)
 	{
-		tmp = ft_strjoin_free(ft_strdup("'"), literal);
-		literal = ft_strjoin_free(tmp, ft_strdup("'"));
+		tmp = x_strjoin_free(ms, x_strdup(ms, "'"), literal);
+		literal = x_strjoin_free(ms, tmp, x_strdup(ms, "'"));
 	}
-	*col->buffer = ft_strjoin_free(*col->buffer, literal);
+	ms->tks[tk_index]->value
+		= x_strjoin_free(ms, ms->tks[tk_index]->value, literal);
+	return (0);
 }
 
 /* parse_dq_seg():
@@ -51,31 +51,32 @@ void	collapse_sq_seg(t_collapse	*col)
 **   - We DO expansions here (like $VAR, $?).
 **   - Append the expanded result to 'buffer'.
 */
-void	collapse_dq_seg(t_collapse	*col)
+int	collapse_dq_seg(t_ms *ms, int *i, int tk_index)
 {
 	int		start;
 	char	*raw_content;
 	char	*expanded;
 
-	(*col->i)++;
-	start = *col->i;
-	while (col->input[*col->i] && col->input[*col->i] != '"')
-		(*col->i)++;
-	if (!col->input[*col->i])
+	(*i)++;
+	start = *i;
+	while (ms->input[*i] && ms->input[*i] != '"')
+		(*i)++;
+	if (!ms->input[*i])
 	{
-		syn_err(col->ms, "unclosed double quote");
-		return ;
+		syn_err(ms, "unclosed double quote");
+		return (-1);
 	}
-	raw_content = ft_substr(col->input, start, *col->i - start);
-	if (!raw_content)
-		error(col->ms, "malloc failed in collapse_dq_seg");
-	(*col->i)++;
-	expanded = expand_env_var(col->ms, raw_content);
+	raw_content = x_substr(ms, ms->input, start, *i - start);
+	(*i)++;
+	expanded = expand_env_var(ms, raw_content);
 	free(raw_content);
-	*col->buffer = ft_strjoin_free(*col->buffer, expanded);
+	ms->tks[tk_index]->value
+		= x_strjoin_free(ms, ms->tks[tk_index]->value, expanded);
+	return (0);
 }
 
-static bool	should_break_unquoted(const char *input, int *i)
+
+static bool	should_break_unquoted(char *input, int *i)
 {
 	if (ft_isspace(input[*i]))
 		return (true);
@@ -96,25 +97,24 @@ static bool	should_break_unquoted(const char *input, int *i)
 **   - Expansions ($VAR, $?) are performed on the unquoted segment.
 **   - Append the expanded text to 'buffer'.
 */
-void	collapse_uq_seg(t_collapse	*col)
+void	collapse_uq_seg(t_ms *ms, int *i, int tk_index)
 {
 	int		start;
 	char	*raw_content;
 	char	*expanded;
 
-	start = *col->i;
-	while (col->input[*col->i])
+	start = *i;
+	while (ms->input[*i])
 	{
-		if (should_break_unquoted(col->input, col->i))
+		if (should_break_unquoted(ms->input, i))
 			break ;
-		(*col->i)++;
+		(*i)++;
 	}
-	if (start == *col->i)
+	if (start == *i)
 		return ;
-	raw_content = ft_substr(col->input, start, (*col->i - start));
-	if (!raw_content)
-		error(col->ms, "ft_substr failed in collapse_uq_seg");
-	expanded = expand_env_var(col->ms, raw_content);
+	raw_content = x_substr(ms, ms->input, start, (*i - start));
+	expanded = expand_env_var(ms, raw_content);
 	free(raw_content);
-	*col->buffer = ft_strjoin_free(*col->buffer, expanded);
+	ms->tks[tk_index]->value
+		= x_strjoin_free(ms, ms->tks[tk_index]->value, expanded);
 }

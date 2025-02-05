@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:41:40 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/01 19:46:26 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/05 12:52:17 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
  *	if the variable is not found
  */
 
-static char	*get_env_variable(t_ms *ms, const char *var_name)
+static char	*get_env_variable(t_ms *ms, char *var_name)
 {
 	size_t	name_len;
 	char	**env;
@@ -37,7 +37,7 @@ static char	*get_env_variable(t_ms *ms, const char *var_name)
 	{
 		if (ft_strncmp(*env, var_name, name_len) == 0
 			&& (*env)[name_len] == '=')
-			return (ft_strdup(*env + name_len + 1));
+			return (x_strdup(ms, *env + name_len + 1));
 		env++;
 	}
 	return (NULL);
@@ -52,17 +52,13 @@ static char	*get_env_variable(t_ms *ms, const char *var_name)
  *	the variable is not found
  */
 
-char	*expand_env_variable(t_ms *ms, const char *content)
+char	*expand_env_variable(t_ms *ms, char *content)
 {
 	char	*value;
 
 	value = get_env_variable(ms, content);
 	if (!value)
-	{
-		value = ft_strdup("");
-		if (!value)
-			error(ms, "ft_strdup() failed in expand_env_variable()");
-	}
+		value = x_strdup(ms, "");
 	return (value);
 }
 
@@ -91,7 +87,7 @@ char	*expand_exit_status(t_ms *ms, int exit_status)
  *	- returns the expanded variable value as a newly allocated string
  */
 
-char	*process_variable(t_ms *ms, const char *content, int *i)
+char	*process_variable(t_ms *ms, char *content, int *i)
 {
 	char	*var_name;
 	char	*expanded;
@@ -107,9 +103,7 @@ char	*process_variable(t_ms *ms, const char *content, int *i)
 	while (content[*i] != '\0'
 		&& (ft_isalnum(content[*i]) || content[*i] == '_'))
 		(*i)++;
-	var_name = ft_substr(content, start + 1, (*i - (start + 1)));
-	if (!var_name)
-		error(ms, "ft_substr() failed in process_variable()");
+	var_name = x_substr(ms, content, start + 1, (*i - (start + 1)));
 	expanded = expand_env_variable(ms, var_name);
 	free(var_name);
 	return (expanded);
@@ -119,7 +113,7 @@ char	*process_variable(t_ms *ms, const char *content, int *i)
  *	- accumulates literal characters in 'word' until encountering a '$' or '\0'
  *	- returns the substring
  */
-char	*process_literal(t_ms *ms, const char *content, int *i)
+char	*process_literal(t_ms *ms, char *content, int *i)
 {
 	int		start;
 	char	*literal;
@@ -127,8 +121,6 @@ char	*process_literal(t_ms *ms, const char *content, int *i)
 	start = *i;
 	while (content[*i] != '\0' && content[*i] != '$')
 		(*i)++;
-	literal = ft_substr(content, start, *i - start);
-	if (!literal)
-		error(ms, "ft_substr() failed in process_literal()");
+	literal = x_substr(ms, content, start, *i - start);
 	return (literal);
 }

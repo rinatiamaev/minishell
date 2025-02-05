@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 14:58:46 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/04 15:03:21 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/05 14:17:14 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@ static void	parse_word_set_name(t_ms *ms, t_cmd *cmd, t_tk *tk)
 {
 	cmd->name = ft_strdup(tk->value);
 	if (!cmd->name)
-		error(ms, "ft_strdup() failed in parse_word_tk");
+	{
+		free_cmd(cmd);
+		error(ms, "ft_strdup(): malloc failed");
+	}
 }
 
 static void	parse_word_add_arg(t_ms *ms, t_cmd *cmd, t_tk *tk)
@@ -31,15 +34,15 @@ static void	parse_word_add_arg(t_ms *ms, t_cmd *cmd, t_tk *tk)
 			sizeof(char *) * (args_len + 2));
 	if (!new_args)
 	{
-		free(cmd->args);
-		error(ms, "ft_realloc() failed in parse_word()");
+		free_cmd(cmd);
+		error(ms, "ft_realloc(): malloc failed");
 	}
 	cmd->args = new_args;
 	cmd->args[args_len] = ft_strdup(tk->value);
 	if (!cmd->args[args_len])
 	{
-		free(cmd->args[args_len]);
-		error(ms, "ft_strdup() failed in parse_word()");
+		free_cmd(cmd);
+		error(ms, "ft_strdup(): malloc failed");
 	}
 	cmd->args[args_len + 1] = NULL;
 }

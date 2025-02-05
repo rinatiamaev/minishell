@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:27:36 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/04 15:04:03 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/05 13:16:15 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,14 @@ typedef enum e_tk_type
 	TK_REDIRECT_INPUT,
 	TK_REDIRECT_OUTPUT,
 	TK_APPEND_OUTPUT,
-	TK_HEREDOC
+	TK_HEREDOC,
+	TK_HEREDOC_DELIMITER
 }	t_tk_type;
 
 typedef struct s_tk
 {
 	t_tk_type	type;
 	char		*value;
-	bool		is_delimiter;
 	bool		delimiter_quoted;
 }	t_tk;
 
@@ -72,49 +72,38 @@ typedef struct s_ms
 {
 	char		**envp;
 	int			exit_status;
-	const char	*input;
+	char		*input;
 	t_tk		**tks;
 	t_cmd		*cmd;
 }	t_ms;
-
-typedef struct s_collapse
-{
-	t_ms		*ms;
-	const char	*input;
-	int			*i;
-	char		**buffer;
-	bool		is_delimiter;
-}	t_collapse;
 
 // PROCESS INPUT
 int		process_input(t_ms *ms);
 
 // LEXER
-t_tk	**lexer(t_ms *ms, const char *input);
+int		lexer(t_ms *ms);
 
 // Create token in lexer
-t_tk	**initialize_tks(t_ms *ms);
-t_tk	*create_tk(t_ms *ms, t_tk_type type, char *value);
-int		ft_is_operator(const char *input, int i);
+void	create_tk(t_ms *ms, int tk_index, t_tk_type type, char *value);
+int		ft_is_operator(char *input, int i);
 void	detect_quoted_delimiter(t_tk *tk);
-char	*ft_strjoin_free(char *s1, char *s2);
-void	collapse_sq_seg(t_collapse	*col);
-void	collapse_dq_seg(t_collapse	*col);
-void	collapse_uq_seg(t_collapse	*col);
-t_tk	*create_pipe_tk(t_ms *ms, int *i);
-t_tk	*create_heredoc_tk(t_ms *ms, int *i);
-t_tk	*create_redirect_input_tk(t_ms *ms, int *i);
-t_tk	*create_redirect_output_tk(t_ms *ms, int *i);
-t_tk	*create_append_output_tk(t_ms *ms, int *i);
+int		collapse_sq_seg(t_ms *ms, int *i, int tk_index);
+int		collapse_dq_seg(t_ms *ms, int *i, int tk_index);
+void	collapse_uq_seg(t_ms *ms, int *i, int tk_index);
+void	create_pipe_tk(t_ms *ms, int *i, int tk_index);
+void	create_heredoc_tk(t_ms *ms, int *i, int tk_index);
+void	create_redirect_input_tk(t_ms *ms, int *i, int tk_index);
+void	create_redirect_output_tk(t_ms *ms, int *i, int tk_index);
+void	create_append_output_tk(t_ms *ms, int *i, int tk_index);
 
 // Expand variable in lexer
-char	*expand_env_var(t_ms *ms, const char *content);
+char	*expand_env_var(t_ms *ms, char *content);
 
 // Utilities for expand variable in lexer
 char	*expand_exit_status(t_ms *ms, int exit_status);
-char	*expand_env_variable(t_ms *ms, const char *content);
-char	*process_literal(t_ms *ms, const char *content, int *i);
-char	*process_variable(t_ms *ms, const char *content, int *i);
+char	*expand_env_variable(t_ms *ms, char *content);
+char	*process_literal(t_ms *ms, char *content, int *i);
+char	*process_variable(t_ms *ms, char *content, int *i);
 
 // PARSER
 t_cmd	*parse_tks(t_ms *ms, t_tk **tks);
@@ -147,6 +136,11 @@ void	cmd_err(t_ms *ms, char *error_message);
 void	builtin_err(t_ms *ms, char *error_message);
 void	error(t_ms *ms, char *error_message);
 
+// UTILS
+char	*x_strdup(t_ms *ms, const char *s);
+char	*x_substr(t_ms *ms, const char *s, unsigned int start, int len);
+char	*x_strjoin_free(t_ms *ms, char *s1, char *s2);
+
 // BUILTINS
 void	builtin_echo(t_ms *ms, t_cmd *cmd);
 void	builtin_cd(t_ms *ms, t_cmd *cmd);
@@ -157,9 +151,9 @@ void	builtin_exit(t_ms *ms, t_cmd *cmd);
 void	builtin_export(t_ms *ms, t_cmd *cmd);
 
 // Prototypes for export utility functions
-bool	is_valid_identifier(const char *name);
-void	export_err(t_ms *ms, const char *arg, char *error_message);
-void	add_or_update_env(t_ms *ms, const char *var);
+bool	is_valid_identifier(char *name);
+void	export_err(t_ms *ms, char *arg, char *error_message);
+void	add_or_update_env(t_ms *ms, char *var);
 
 void	print_cmd(t_cmd *cmd, int indent);
 void	print_tks(t_tk **tks);

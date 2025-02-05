@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:43:40 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/02 14:57:05 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/05 14:18:41 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,23 @@ static int	parse_heredoc(t_ms *ms, t_cmd *cmd, t_tk **tks, int *i)
 	(*i)++;
 	if (!tks[*i])
 	{
+		free_cmd(cmd);
 		syn_err(ms, "expected a delimiter after '<<'");
 		return (-1);
 	}
-	if (tks[*i]->type != TK_WORD)
+	if (tks[*i]->type != TK_HEREDOC_DELIMITER)
 	{
+		free_cmd(cmd);
 		syn_err(ms, "invalid tk after '<<'");
 		return (-1);
 	}
 	free(cmd->heredoc_delimiter);
 	cmd->heredoc_delimiter = ft_strdup(tks[*i]->value);
 	if (!cmd->heredoc_delimiter)
-		error(ms, "Error ft_strdup() failed in parse_heredoc");
+	{
+		free_cmd(cmd);
+		error(ms, "ft_strdup(): malloc failed");
+	}
 	return (0);
 }
 
@@ -59,17 +64,22 @@ static int	parse_redirect_output(t_ms *ms, t_cmd *cmd, int *i, int append)
 	(*i)++;
 	if (!ms->tks[*i])
 	{
+		free_cmd(cmd);
 		syn_err(ms, "expected a file after '>' or '>>'");
 		return (-1);
 	}
 	if (ms->tks[*i]->type != TK_WORD)
 	{
+		free_cmd(cmd);
 		syn_err(ms, "invalid tk after '>' or '>>'");
 		return (-1);
 	}
 	cmd->output_redirect = ft_strdup(ms->tks[*i]->value);
 	if (!cmd->output_redirect)
-		error(ms, "Error ft_strdup() failed in parse_redirect_output");
+	{
+		free_cmd(cmd);
+		error(ms, "ft_strdup(): malloc failed");
+	}
 	cmd->append = append;
 	return (0);
 }
@@ -89,17 +99,22 @@ static int	parse_redirect_input(t_ms *ms, t_cmd *cmd, t_tk **tks, int *i)
 	(*i)++;
 	if (!tks[*i])
 	{
+		free_cmd(cmd);
 		syn_err(ms, "expected a file after '<'");
 		return (-1);
 	}
 	if (tks[*i]->type != TK_WORD)
 	{
+		free_cmd(cmd);
 		syn_err(ms, "invalid tk after '<'");
 		return (-1);
 	}
 	cmd->input_redirect = ft_strdup(tks[*i]->value);
 	if (!cmd->input_redirect)
-		error(ms, "Error ft_strdup() failed in parse_redirect_input");
+	{
+		free_cmd(cmd);
+		error(ms, "ft_strdup(): malloc failed");
+	}
 	return (0);
 }
 
