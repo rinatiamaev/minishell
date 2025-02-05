@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 12:40:58 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/05 12:45:31 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/05 23:44:33 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*x_strdup(t_ms *ms, const char *s)
 {
-	char *res;
+	char	*res;
 
 	res = ft_strdup(s);
 	if (!res)
@@ -24,7 +24,7 @@ char	*x_strdup(t_ms *ms, const char *s)
 
 char	*x_substr(t_ms *ms, const char *s, unsigned int start, int len)
 {
-	char *res;
+	char	*res;
 
 	res = ft_substr(s, start, len);
 	if (!res)
@@ -34,7 +34,7 @@ char	*x_substr(t_ms *ms, const char *s, unsigned int start, int len)
 
 char	*x_strjoin_free(t_ms *ms, char *s1, char *s2)
 {
-	char *joined;
+	char	*joined;
 
 	joined = ft_strjoin(s1, s2);
 	if (!joined)

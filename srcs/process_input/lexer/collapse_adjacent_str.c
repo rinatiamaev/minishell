@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 20:39:19 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/05 13:02:01 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/05 23:43:42 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ int	collapse_dq_seg(t_ms *ms, int *i, int tk_index)
 	return (0);
 }
 
-
 static bool	should_break_unquoted(char *input, int *i)
 {
 	if (ft_isspace(input[*i]))
@@ -113,8 +112,13 @@ void	collapse_uq_seg(t_ms *ms, int *i, int tk_index)
 	if (start == *i)
 		return ;
 	raw_content = x_substr(ms, ms->input, start, (*i - start));
-	expanded = expand_env_var(ms, raw_content);
-	free(raw_content);
+	if (ms->tks[tk_index]->type == TK_HEREDOC_DELIMITER)
+		expanded = raw_content;
+	else
+	{
+		expanded = expand_env_var(ms, raw_content);
+		free(raw_content);
+	}
 	ms->tks[tk_index]->value
 		= x_strjoin_free(ms, ms->tks[tk_index]->value, expanded);
 }

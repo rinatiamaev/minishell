@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:00:13 by riamaev           #+#    #+#             */
-/*   Updated: 2025/02/05 14:54:52 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/05 23:51:20 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,7 @@ static char	**setup_argv(t_ms *ms, t_cmd *cmd)
 		argc++;
 	argv = malloc((argc + 2) * sizeof(char *));
 	if (!argv)
-	{
-		write(2, "malloc() failed in setup_argv()\n", 32);
-		ms->exit_status = 1;
-		return (NULL);
-	}
+		error(ms, "malloc() failed\n");
 	argv[0] = cmd->name;
 	i = 0;
 	while (i < argc)
@@ -74,21 +70,44 @@ static int	child_heredoc_if_needed(t_ms *ms, t_cmd *cmd, int prev_fd)
 
 static void	child_exec_builtin_or_command(t_ms *ms, t_cmd *cmd, char **argv)
 {
+	struct stat	path_stat;
+
 	if (cmd->builtin)
 	{
 		execute_builtin_cmd(ms, cmd);
+		free(argv);
 		exit(ms->exit_status);
 	}
-	if (!cmd->path)
+	if (!stat(cmd->path, &path_stat) && S_ISDIR(path_stat.st_mode))
 	{
+		cmd_err(cmd, "Is a directory");
+		free(argv);
+		exit(ms->exit_status = 126);
+	}
+	execve(cmd->path, argv, ms->envp);
+	if (errno == ENOENT)
+	{
+		cmd_err(cmd, "Command not found");
 		free(argv);
 		exit(ms->exit_status = 127);
 	}
-	if (execve(cmd->path, argv, ms->envp) == -1)
+	else if (errno == EACCES || errno == ENOEXEC)
 	{
-		perror("execve() failed");
+		cmd_err(cmd, NULL);
 		free(argv);
-		exit(ms->exit_status = 127);
+		exit(ms->exit_status = 126);
+	}
+	else if (errno)
+	{
+		cmd_err(cmd, NULL);
+		free(argv);
+		exit(ms->exit_status = 1);
+	}
+	else
+	{
+		cmd_err(cmd, "execve() failed");
+		free(argv);
+		exit(ms->exit_status = 1);
 	}
 }
 

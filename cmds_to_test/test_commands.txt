@@ -145,3 +145,8 @@ echo			asdf
 echo ""$USER""
 'e'''""''"c"h"""o" ''""$USER
 asdf"fdsa"
+
+seq 1 10000000 | xargs echo
+
+ulimit -v 1024
+ulimit -v unlimited

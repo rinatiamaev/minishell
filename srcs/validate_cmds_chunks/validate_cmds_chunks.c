@@ -12,43 +12,16 @@
 
 #include "minishell.h"
 
-static bool	is_cmd_valid(t_ms *ms, t_cmd *cmd)
-{
-	if (is_builtin(cmd) == true)
-	{
-		cmd->builtin = true;
-		return (true);
-	}
-	if (is_external(ms, cmd, cmd->name) == true)
-	{
-		cmd->builtin = false;
-		return (true);
-	}
-	ms->exit_status = 127;
-	return (false);
-}
-
-bool	validate_cmds(t_ms *ms, t_cmd *cmd, char **envp)
+bool	validate_cmds_chunks(t_ms *ms, t_cmd *cmd, char **envp)
 {
 	if (!cmd)
 		return (true);
-	if ((!cmd->name && cmd->heredoc_delimiter)
-		|| (!cmd->name && cmd->input_redirect)
-		|| (!cmd->name && cmd->output_redirect))
+	if (!cmd->name && (cmd->heredoc_delimiter
+			|| cmd->input_redirect || cmd->output_redirect))
 		return (true);
-	if (!is_cmd_valid(ms, cmd))
-	{
-		if (!cmd->builtin && cmd->path && access(cmd->path, X_OK) != 0)
-		{
-			cmd_err(cmd, "command not executable");
-			ms->exit_status = 126;
-		}
-		else
-		{
-			cmd_err(cmd, "command not found");
-			ms->exit_status = 127;
-		}
+	if (!cmd->name)
 		return (false);
-	}
-	return (validate_cmds(ms, cmd->pipe_to, envp));
+	else if (!is_builtin(cmd) && !is_external(ms, cmd, cmd->name))
+		return (true);
+	return (validate_cmds_chunks(ms, cmd->pipe_to, envp));
 }

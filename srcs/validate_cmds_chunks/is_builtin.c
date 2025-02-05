@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 08:44:06 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/03 14:00:39 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/05 22:32:35 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ bool	is_builtin(t_cmd *cmd)
 	while (builtin_cmds[i])
 	{
 		if (ft_strcmp(cmd->name, builtin_cmds[i]) == 0)
+		{
+			cmd->builtin = true;
 			return (true);
+		}
 		i++;
 	}
 	return (false);

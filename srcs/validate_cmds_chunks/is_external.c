@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 08:42:03 by nlouis            #+#    #+#             */
-/*   Updated: 2025/01/28 08:45:30 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/06 00:01:56 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static char	*get_external_cmd_path(t_ms *ms, const char *cmd_name)
 		return (NULL);
 	path_directories = ft_split(envp_path, ':');
 	if (!path_directories)
-		error(ms, "Error ft_split() failed in resolve_external_cmd");
+		error(ms, "ft_split(): malloc failed");
 	path = search_executable(path_directories, cmd_name);
 	ft_free_array((void **)path_directories);
 	return (path);
@@ -78,6 +78,13 @@ bool	is_external(t_ms *ms, t_cmd *cmd, char *cmd_name)
 	if (path)
 	{
 		cmd->path = path;
+		cmd->builtin = false;
+		return (true);
+	}
+	else
+	{
+		cmd->path = x_strdup(ms, cmd_name);
+		cmd->builtin = false;
 		return (true);
 	}
 	return (false);
