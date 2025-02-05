@@ -35,8 +35,6 @@
 
 # define MAX_TKS 1024
 
-# define FILE_PERMISSIONS (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
-
 typedef enum e_tk_type
 {
 	TK_WORD,

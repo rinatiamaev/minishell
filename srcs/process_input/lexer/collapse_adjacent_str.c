@@ -75,7 +75,6 @@ int	collapse_dq_seg(t_ms *ms, int *i, int tk_index)
 	return (0);
 }
 
-
 static bool	should_break_unquoted(char *input, int *i)
 {
 	if (ft_isspace(input[*i]))
