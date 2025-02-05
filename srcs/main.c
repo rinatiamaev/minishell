@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:27:16 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/04 11:30:41 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/05 14:25:03 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@ static t_ms	*setup_minishell(int argc, char **argv, char **envp)
 	(void)argv;
 	ms = ft_calloc(1, sizeof(t_ms));
 	if (!ms)
-		error(NULL, "ft_calloc() failed in setup_minishell()");
+		error(NULL, "ft_calloc(): malloc failed");
 	ms->envp = ft_copy_strarray(envp);
 	if (!ms->envp)
-		error(ms, "ft_copy_strarray() failed in setup_minishell()");
+		error(ms, "ft_copy_strarray(): malloc failed");
 	return (ms);
 }
 

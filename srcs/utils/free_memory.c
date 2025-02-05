@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 19:20:21 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/03 13:45:46 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/04 16:17:22 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ void	free_cmd(t_cmd *cmd)
 		}
 		free(cmd->args);
 	}
-	free(cmd->heredoc_delimiter);
 	free(cmd->input_redirect);
 	free(cmd->output_redirect);
+	free(cmd->heredoc_delimiter);
 	free(cmd->path);
 	if (cmd->pipe_to)
 		free_cmd(cmd->pipe_to);

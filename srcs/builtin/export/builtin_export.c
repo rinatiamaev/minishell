@@ -6,13 +6,13 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 16:51:50 by riamaev           #+#    #+#             */
-/*   Updated: 2025/01/31 11:13:24 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/05 11:44:15 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	export_err(t_ms *ms, const char *arg, char *error_message)
+void	export_err(t_ms *ms, char *arg, char *error_message)
 {
 	ft_putstr_fd(RED "⭕ Error: " RESET, STDERR_FILENO);
 	ft_putstr_fd((char *)arg, STDERR_FILENO);
@@ -22,7 +22,7 @@ void	export_err(t_ms *ms, const char *arg, char *error_message)
 	ms->exit_status = 1;
 }
 
-static void	process_env_var_with_equal(t_ms *ms, const char *arg)
+static void	process_env_var_with_equal(t_ms *ms, char *arg)
 {
 	char		*name;
 
@@ -43,7 +43,7 @@ static void	process_env_var_with_equal(t_ms *ms, const char *arg)
 	ms->exit_status = 0;
 }
 
-static void	process_valid_identifier(t_ms *ms, const char *arg)
+static void	process_valid_identifier(t_ms *ms, char *arg)
 {
 	char	*existing_var;
 	char	*new_var;
@@ -74,7 +74,7 @@ static void	print_env(t_ms *ms)
 void	builtin_export(t_ms *ms, t_cmd *cmd)
 {
 	int			i;
-	const char	*arg;
+	char		*arg;
 
 	i = 0;
 	if (!cmd->args || !cmd->args[0])

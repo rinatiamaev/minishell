@@ -1,0 +1,12 @@
+izhairguns
+DOC
+HERE
+cat <<HERE
+izhairguns
+oi
+HERE
+cat <<HERE
+izhairguns
+oi
+HRE
+HER

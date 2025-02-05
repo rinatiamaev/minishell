@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 08:48:28 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/04 11:54:06 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/05 14:37:57 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,17 @@ static void	exit_program_ctrld(t_ms *ms)
 	exit(EXIT_SUCCESS);
 }
 
-static char	*get_input(t_ms *ms)
+static int	get_input(t_ms *ms)
 {
-	char	*input;
-
-	input = readline(BOLD_BLUE "💾 minishell🔹 " RESET);
-	if (!input)
+	ms->input = readline(BOLD_BLUE "💾 minishell🔹 " RESET);
+	if (!ms->input)
 		exit_program_ctrld(ms);
 	if (errno)
 		error(ms, "readline() failed in get_input()");
-	if (*input == '\0')
-		return (NULL);
-	add_history(input);
-	return (input);
+	if (*ms->input == '\0')
+		return (-1);
+	add_history(ms->input);
+	return (0);
 }
 
 /* process_input()
@@ -45,11 +43,9 @@ static char	*get_input(t_ms *ms)
  */
 int	process_input(t_ms *ms)
 {
-	ms->input = get_input(ms);
-	if (!ms->input)
+	if (get_input(ms))
 		return (-1);
-	ms->tks = lexer(ms, ms->input);
-	if (!ms->tks)
+	if (lexer(ms))
 		return (-1);
 	ms->cmd = parse_tks(ms, ms->tks);
 	if (!ms->cmd)

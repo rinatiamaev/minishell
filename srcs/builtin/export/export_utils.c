@@ -6,13 +6,13 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 18:05:21 by riamaev           #+#    #+#             */
-/*   Updated: 2025/02/03 14:10:52 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/05 08:07:43 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	is_valid_identifier(const char *name)
+bool	is_valid_identifier(char *name)
 {
 	int	i;
 
@@ -28,7 +28,7 @@ bool	is_valid_identifier(const char *name)
 	return (true);
 }
 
-int	find_env_variable(t_ms *ms, const char *var, size_t var_len)
+int	find_env_variable(t_ms *ms, char *var, size_t var_len)
 {
 	int	i;
 
@@ -43,7 +43,7 @@ int	find_env_variable(t_ms *ms, const char *var, size_t var_len)
 	return (-1);
 }
 
-static void	append_new_env(t_ms *ms, const char *var)
+static void	append_new_env(t_ms *ms, char *var)
 {
 	int		i;
 	char	**new_envp;
@@ -68,7 +68,7 @@ static void	append_new_env(t_ms *ms, const char *var)
 	ms->envp = new_envp;
 }
 
-static int	update_existing_env(t_ms *ms, const char *var)
+static int	update_existing_env(t_ms *ms, char *var)
 {
 	char	*equals_sign;
 	int		var_len;
@@ -91,7 +91,7 @@ static int	update_existing_env(t_ms *ms, const char *var)
 	return (0);
 }
 
-void	add_or_update_env(t_ms *ms, const char *var)
+void	add_or_update_env(t_ms *ms, char *var)
 {
 	if (update_existing_env(ms, var) == 1)
 		return ;

@@ -6,13 +6,13 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 20:21:20 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/04 14:34:41 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/05 12:06:56 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_is_operator(const char *input, int i)
+int	ft_is_operator(char *input, int i)
 {
 	if (input[i] == '|')
 		return (1);
@@ -52,36 +52,4 @@ void	detect_quoted_delimiter(t_tk *tk)
 			tk->value = cleaned;
 		}
 	}
-}
-
-t_tk	**initialize_tks(t_ms *ms)
-{
-	t_tk	**tks;
-
-	tks = ft_calloc(MAX_TKS, sizeof(t_tk *));
-	if (!tks)
-		error(ms, "malloc() failed in initialize_tks()");
-	return (tks);
-}
-
-char	*ft_strjoin_free(char *s1, char *s2)
-{
-	char	*joined;
-
-	if (!s1 && !s2)
-		return (NULL);
-	if (!s1)
-		return (s2);
-	if (!s2)
-		return (s1);
-	joined = ft_strjoin(s1, s2);
-	if (!joined)
-	{
-		free(s1);
-		free(s2);
-		return (NULL);
-	}
-	free(s1);
-	free(s2);
-	return (joined);
 }
