@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 08:42:03 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/06 14:43:13 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/06 14:52:51 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,7 @@ bool	is_external(t_ms *ms, t_cmd *cmd, char *cmd_name)
 		cmd->builtin = false;
 		return (true);
 	}
+	cmd->path = x_strdup(ms, cmd_name);
+	cmd->builtin = false;
 	return (false);
 }

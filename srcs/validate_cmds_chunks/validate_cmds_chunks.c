@@ -22,6 +22,6 @@ bool	validate_cmds_chunks(t_ms *ms, t_cmd *cmd, char **envp)
 	if (!cmd->name)
 		return (false);
 	if (!is_builtin(cmd) && !is_external(ms, cmd, cmd->name))
-		return (false);
+		return (true);
 	return (validate_cmds_chunks(ms, cmd->pipe_to, envp));
 }

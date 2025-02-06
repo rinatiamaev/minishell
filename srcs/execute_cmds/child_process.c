@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:00:13 by riamaev           #+#    #+#             */
-/*   Updated: 2025/02/06 14:47:21 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/06 14:53:20 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,6 @@ static void	child_exec_builtin_or_command(t_ms *ms, t_cmd *cmd, char **argv)
 		free(argv);
 		exit(ms->exit_status);
 	}
-	if (!cmd->path)
-		exit(ms->exit_status = 0);
 	execve(cmd->path, argv, ms->envp);
 	if (errno)
 	{
