@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:43:40 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/05 14:18:41 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/06 21:27:23 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,11 @@ static int	parse_redirect_input(t_ms *ms, t_cmd *cmd, t_tk **tks, int *i)
 	{
 		free_cmd(cmd);
 		error(ms, "ft_strdup(): malloc failed");
+	}
+	if (access(cmd->input_redirect, F_OK))
+	{
+		free(cmd->input_redirect);
+		cmd->input_redirect = NULL;
 	}
 	return (0);
 }

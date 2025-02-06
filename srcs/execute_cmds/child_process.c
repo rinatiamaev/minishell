@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:00:13 by riamaev           #+#    #+#             */
-/*   Updated: 2025/02/06 14:53:20 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/06 21:30:25 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ static int	child_heredoc_if_needed(t_ms *ms, t_cmd *cmd, bool is_piped)
 
 static void	child_exec_builtin_or_command(t_ms *ms, t_cmd *cmd, char **argv)
 {
+	if (!cmd->name)
+		exit(ms->exit_status);
 	if (cmd->builtin)
 	{
 		execute_builtin_cmd(ms, cmd);

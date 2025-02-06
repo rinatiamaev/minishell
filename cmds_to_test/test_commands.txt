@@ -43,7 +43,7 @@ Double quotes
 - echo "home is $HOME" ✔️
 - echo "this is $UNDEFINED" ✔️
 - echo "$USER is in $PWD" ✔️
-- echo "hello \"world\"" ❌
+- echo "hello \"world\"" ✔️
 - echo "price is \$10" ✔️
 - echo "price is $\10" ✔️
 - echo "this is a backslash \\" ✔️

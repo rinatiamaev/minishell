@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 18:32:29 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/06 14:25:27 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/06 22:58:34 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,15 @@ static t_cmd	*parse_pipe(t_ms *ms, t_cmd *cmd, t_tk **tks, int *i)
 	if (!tks[*i])
 	{
 		free_cmd(cmd);
-		syn_err(ms, "invalid tk near '|'");
+		syn_err(ms, "near unexpected token `|'");
 		return (NULL);
 	}
 	cmd->pipe_to = parse_tks(ms, &tks[*i]);
 	if (!cmd->pipe_to)
+	{
+		free_cmd(cmd);
 		return (NULL);
+	}
 	return (cmd);
 }
 
@@ -70,18 +73,29 @@ t_cmd	*parse_tks(t_ms *ms, t_tk **tks)
 {
 	t_cmd	*cmd;
 	int		i;
+	bool	has_command;
 
 	i = 0;
 	cmd = initialize_cmd(ms);
+	has_command = false;
 	while (tks[i] != NULL)
 	{
 		if (tks[i]->type == TK_WORD)
+		{
 			parse_word(ms, cmd, tks[i]);
+			has_command = true;
+		}
 		else if (tks[i]->type == TK_PIPE)
 		{
+			if (!has_command)
+			{
+				free_cmd(cmd);
+				syn_err(ms, "near unexpected token `|'");
+				return (NULL);
+			}
 			if (parse_pipe(ms, cmd, tks, &i) == NULL)
 				return (NULL);
-			break ;
+			break;
 		}
 		else
 		{
@@ -92,3 +106,4 @@ t_cmd	*parse_tks(t_ms *ms, t_tk **tks)
 	}
 	return (cmd);
 }
+

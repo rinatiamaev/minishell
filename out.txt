@@ -1,0 +1,13 @@
+LICENSE
+Makefile
+README.md
+cmds_to_test
+evaluationsheet.minishell.pdf
+include
+libft
+minishell
+minishell.subject .pdf
+objs
+out.txt
+srcs
+test_files
