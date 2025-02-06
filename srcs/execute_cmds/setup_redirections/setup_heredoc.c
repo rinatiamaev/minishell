@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 14:39:40 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/04 14:56:02 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/06 14:15:35 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static int	parse_heredocs(t_ms *ms, t_cmd *cmd, t_tk **tks)
 			prev_fd = pipe_fds[0];
 			if (cmd->heredoc_delimiter)
 				free(cmd->heredoc_delimiter);
-			cmd->heredoc_delimiter = ft_strdup(tks[i + 1]->value);
+			cmd->heredoc_delimiter = x_strdup(ms, tks[i + 1]->value);
 		}
 	}
 	return (prev_fd);
@@ -100,13 +100,18 @@ static int	connect_heredoc_stdin(int fd)
 	return (0);
 }
 
-int	handle_heredoc(t_ms *ms, t_cmd *cmd, t_tk **tks)
+int	handle_heredoc(t_ms *ms, t_cmd *cmd, t_tk **tks, bool is_piped)
 {
 	int	fd;
 
 	fd = parse_heredocs(ms, cmd, tks);
 	if (fd < 0)
 		return (-1);
+	if (is_piped && !cmd->name)
+	{
+		close(fd);
+		return (0);
+	}
 	if (!read_heredoc_data_if_no_cmd(cmd, fd))
 		return (0);
 	return (connect_heredoc_stdin(fd));

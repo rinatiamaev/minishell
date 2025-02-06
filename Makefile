@@ -30,10 +30,18 @@ SRCS =  srcs/builtin/builtin_cd.c \
 		srcs/utils/errors.c \
 		srcs/utils/free_memory.c \
 		srcs/utils/x_memory_utils.c \
+<<<<<<< HEAD
 		srcs/validate_cmds/is_builtin.c \
 		srcs/validate_cmds/is_external.c \
 		srcs/validate_cmds/validate_cmds.c \
 		srcs/main.c
+=======
+		srcs/validate_cmds_chunks/is_builtin.c \
+		srcs/validate_cmds_chunks/is_external.c \
+		srcs/validate_cmds_chunks/validate_cmds_chunks.c \
+		srcs/main.c \
+		srcs/debugging_print.c
+>>>>>>> feature/toonsa
 
 OBJSDIR = objs
 OBJS   = $(addprefix $(OBJSDIR)/,$(SRCS:.c=.o))

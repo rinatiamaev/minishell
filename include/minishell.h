@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:27:36 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/05 14:32:53 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/06 14:43:24 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # define RED "\033[0;31m"
 # define RESET "\033[0m"
 
-# define MAX_TKS 1024
+# define MAX_TKS 24000
 
 typedef enum e_tk_type
 {
@@ -117,9 +117,9 @@ void	execute_cmd(t_ms *ms, t_cmd *cmd);
 void	execute_builtin_cmd(t_ms *ms, t_cmd *cmd);
 void	child_process(t_ms *ms, int prev_fd, int next_fd, t_cmd *cmd);
 int		setup_redirections(t_ms *ms, t_cmd *cmd);
-int		handle_heredoc(t_ms *ms, t_cmd *cmd, t_tk **tks);
+int		handle_heredoc(t_ms *ms, t_cmd *cmd, t_tk **tks, bool is_piped);
 
-bool	validate_cmds(t_ms *ms, t_cmd *cmd, char **envp);
+bool	validate_cmds_chunks(t_ms *ms, t_cmd *cmd, char **envp);
 bool	is_external(t_ms *ms, t_cmd *cmd, char *cmd_name);
 bool	is_builtin(t_cmd *cmd);
 

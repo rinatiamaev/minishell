@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:00:13 by riamaev           #+#    #+#             */
-/*   Updated: 2025/02/05 14:54:52 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/06 14:53:20 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,7 @@ static char	**setup_argv(t_ms *ms, t_cmd *cmd)
 		argc++;
 	argv = malloc((argc + 2) * sizeof(char *));
 	if (!argv)
-	{
-		write(2, "malloc() failed in setup_argv()\n", 32);
-		ms->exit_status = 1;
-		return (NULL);
-	}
+		error(ms, "malloc() failed\n");
 	argv[0] = cmd->name;
 	i = 0;
 	while (i < argc)
@@ -62,13 +58,10 @@ static int	setup_pipe_redirection(int prev_fd, int next_fd)
 	return (0);
 }
 
-static int	child_heredoc_if_needed(t_ms *ms, t_cmd *cmd, int prev_fd)
+static int	child_heredoc_if_needed(t_ms *ms, t_cmd *cmd, bool is_piped)
 {
-	if (prev_fd == -1 && cmd->heredoc_delimiter)
-	{
-		if (handle_heredoc(ms, cmd, ms->tks) == -1)
-			return (-1);
-	}
+	if (cmd->heredoc_delimiter)
+		return (handle_heredoc(ms, cmd, ms->tks, is_piped));
 	return (0);
 }
 
@@ -77,26 +70,30 @@ static void	child_exec_builtin_or_command(t_ms *ms, t_cmd *cmd, char **argv)
 	if (cmd->builtin)
 	{
 		execute_builtin_cmd(ms, cmd);
+		free(argv);
 		exit(ms->exit_status);
 	}
-	if (!cmd->path)
+	execve(cmd->path, argv, ms->envp);
+	if (errno)
 	{
+		cmd_err(cmd, "execve() failed");
 		free(argv);
-		exit(ms->exit_status = 127);
-	}
-	if (execve(cmd->path, argv, ms->envp) == -1)
-	{
-		perror("execve() failed");
-		free(argv);
-		exit(ms->exit_status = 127);
+		if (errno == EACCES || errno == ENOEXEC)
+			exit(ms->exit_status = 126);
+		else if (errno == ENOENT)
+			exit(ms->exit_status = 127);
+		else
+			exit(ms->exit_status = 1);
 	}
 }
 
 void	child_process(t_ms *ms, int prev_fd, int next_fd, t_cmd *cmd)
 {
 	char	**argv;
+	bool	is_piped;
 
-	if (child_heredoc_if_needed(ms, cmd, prev_fd) == -1)
+	is_piped = (prev_fd != -1 || cmd->pipe_to != NULL);
+	if (child_heredoc_if_needed(ms, cmd, is_piped) == -1)
 		exit(ms->exit_status = 1);
 	if (setup_pipe_redirection(prev_fd, next_fd) == -1)
 		exit(ms->exit_status = 1);
