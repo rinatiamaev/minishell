@@ -18,10 +18,10 @@ bool	validate_cmds_chunks(t_ms *ms, t_cmd *cmd, char **envp)
 		return (true);
 	if (!cmd->name && (cmd->heredoc_delimiter
 			|| cmd->input_redirect || cmd->output_redirect))
-		return (true);
-	else if (!cmd->name)
+		return (validate_cmds_chunks(ms, cmd->pipe_to, envp));
+	if (!cmd->name)
 		return (false);
-	else if (!is_builtin(cmd) && !is_external(ms, cmd, cmd->name))
-		return (true);
+	if (!is_builtin(cmd) && !is_external(ms, cmd, cmd->name))
+		return (false);
 	return (validate_cmds_chunks(ms, cmd->pipe_to, envp));
 }

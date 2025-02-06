@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:00:13 by riamaev           #+#    #+#             */
-/*   Updated: 2025/02/06 14:05:22 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/06 14:47:21 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,6 @@ static int	child_heredoc_if_needed(t_ms *ms, t_cmd *cmd, bool is_piped)
 
 static void	child_exec_builtin_or_command(t_ms *ms, t_cmd *cmd, char **argv)
 {
-	if (!cmd->name)
-		exit(ms->exit_status = 0);
 	if (cmd->builtin)
 	{
 		execute_builtin_cmd(ms, cmd);
@@ -78,23 +76,16 @@ static void	child_exec_builtin_or_command(t_ms *ms, t_cmd *cmd, char **argv)
 	if (!cmd->path)
 		exit(ms->exit_status = 0);
 	execve(cmd->path, argv, ms->envp);
-	if (errno == ENOENT)
+	if (errno)
 	{
 		cmd_err(cmd, "execve() failed");
 		free(argv);
-		exit(ms->exit_status = 127);
-	}
-	else if (errno == EACCES || errno == ENOEXEC)
-	{
-		cmd_err(cmd, "execve() failed");
-		free(argv);
-		exit(ms->exit_status = 126);
-	}
-	else if (errno)
-	{
-		cmd_err(cmd, "execve() failed");
-		free(argv);
-		exit(ms->exit_status = 1);
+		if (errno == EACCES || errno == ENOEXEC)
+			exit(ms->exit_status = 126);
+		else if (errno == ENOENT)
+			exit(ms->exit_status = 127);
+		else
+			exit(ms->exit_status = 1);
 	}
 }
 
