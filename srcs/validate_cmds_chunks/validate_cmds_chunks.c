@@ -19,7 +19,7 @@ bool	validate_cmds_chunks(t_ms *ms, t_cmd *cmd, char **envp)
 	if (!cmd->name && (cmd->heredoc_delimiter
 			|| cmd->input_redirect || cmd->output_redirect))
 		return (true);
-	if (!cmd->name)
+	else if (!cmd->name)
 		return (false);
 	else if (!is_builtin(cmd) && !is_external(ms, cmd, cmd->name))
 		return (true);

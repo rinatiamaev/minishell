@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 18:32:29 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/05 14:15:45 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/06 09:31:02 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 static t_cmd	*parse_pipe(t_ms *ms, t_cmd *cmd, t_tk **tks, int *i)
 {
 	(*i)++;
-	if (!tks[*i] || tks[*i]->type != TK_WORD)
+	if (!tks[*i]/*  || tks[*i]->type != TK_WORD */)
 	{
 		free_cmd(cmd);
 		syn_err(ms, "invalid tk near '|'");

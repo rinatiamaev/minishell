@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:27:36 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/05 23:16:53 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/06 10:01:08 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ void	execute_cmd(t_ms *ms, t_cmd *cmd);
 void	execute_builtin_cmd(t_ms *ms, t_cmd *cmd);
 void	child_process(t_ms *ms, int prev_fd, int next_fd, t_cmd *cmd);
 int		setup_redirections(t_ms *ms, t_cmd *cmd);
-int		handle_heredoc(t_ms *ms, t_cmd *cmd, t_tk **tks);
+int	handle_heredoc(t_ms *ms, t_cmd *cmd, t_tk **tks, bool is_piped);
 
 bool	validate_cmds_chunks(t_ms *ms, t_cmd *cmd, char **envp);
 bool	is_external(t_ms *ms, t_cmd *cmd, char *cmd_name);

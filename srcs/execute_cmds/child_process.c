@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:00:13 by riamaev           #+#    #+#             */
-/*   Updated: 2025/02/05 23:51:20 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/06 14:05:22 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,52 +58,39 @@ static int	setup_pipe_redirection(int prev_fd, int next_fd)
 	return (0);
 }
 
-static int	child_heredoc_if_needed(t_ms *ms, t_cmd *cmd, int prev_fd)
+static int	child_heredoc_if_needed(t_ms *ms, t_cmd *cmd, bool is_piped)
 {
-	if (prev_fd == -1 && cmd->heredoc_delimiter)
-	{
-		if (handle_heredoc(ms, cmd, ms->tks) == -1)
-			return (-1);
-	}
+	if (cmd->heredoc_delimiter)
+		return (handle_heredoc(ms, cmd, ms->tks, is_piped));
 	return (0);
 }
 
 static void	child_exec_builtin_or_command(t_ms *ms, t_cmd *cmd, char **argv)
 {
-	struct stat	path_stat;
-
+	if (!cmd->name)
+		exit(ms->exit_status = 0);
 	if (cmd->builtin)
 	{
 		execute_builtin_cmd(ms, cmd);
 		free(argv);
 		exit(ms->exit_status);
 	}
-	if (!stat(cmd->path, &path_stat) && S_ISDIR(path_stat.st_mode))
-	{
-		cmd_err(cmd, "Is a directory");
-		free(argv);
-		exit(ms->exit_status = 126);
-	}
+	if (!cmd->path)
+		exit(ms->exit_status = 0);
 	execve(cmd->path, argv, ms->envp);
 	if (errno == ENOENT)
 	{
-		cmd_err(cmd, "Command not found");
+		cmd_err(cmd, "execve() failed");
 		free(argv);
 		exit(ms->exit_status = 127);
 	}
 	else if (errno == EACCES || errno == ENOEXEC)
 	{
-		cmd_err(cmd, NULL);
+		cmd_err(cmd, "execve() failed");
 		free(argv);
 		exit(ms->exit_status = 126);
 	}
 	else if (errno)
-	{
-		cmd_err(cmd, NULL);
-		free(argv);
-		exit(ms->exit_status = 1);
-	}
-	else
 	{
 		cmd_err(cmd, "execve() failed");
 		free(argv);
@@ -114,8 +101,10 @@ static void	child_exec_builtin_or_command(t_ms *ms, t_cmd *cmd, char **argv)
 void	child_process(t_ms *ms, int prev_fd, int next_fd, t_cmd *cmd)
 {
 	char	**argv;
+	bool	is_piped;
 
-	if (child_heredoc_if_needed(ms, cmd, prev_fd) == -1)
+	is_piped = (prev_fd != -1 || cmd->pipe_to != NULL);
+	if (child_heredoc_if_needed(ms, cmd, is_piped) == -1)
 		exit(ms->exit_status = 1);
 	if (setup_pipe_redirection(prev_fd, next_fd) == -1)
 		exit(ms->exit_status = 1);
