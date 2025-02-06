@@ -14,15 +14,16 @@
 
 static int	handle_output_redirection(t_cmd *cmd)
 {
-	int	out_fd;
-	int	flags;
+	int				out_fd;
+	int				flags;
+	const mode_t	file_permissions = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
 
 	flags = O_WRONLY | O_CREAT;
 	if (cmd->append)
 		flags |= O_APPEND;
 	else
 		flags |= O_TRUNC;
-	out_fd = open(cmd->output_redirect, flags, FILE_PERMISSIONS);
+	out_fd = open(cmd->output_redirect, flags, file_permissions);
 	if (out_fd == -1)
 	{
 		perror("Error opening output file");
