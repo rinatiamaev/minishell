@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 08:54:46 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/05 23:06:28 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/07 09:38:10 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,14 @@ void	builtin_err(t_ms *ms, char *error_message)
 	ft_putstr_fd(": ", STDERR_FILENO);
 	ft_putstr_fd(error_message, STDERR_FILENO);
 	ft_putstr_fd("\n", STDERR_FILENO);
+}
+
+void	input_err(t_ms *ms, t_cmd *cmd)
+{
+	ms->exit_status = 1;
+	ft_putstr_fd(RED "⭕ Error: " RESET, STDERR_FILENO);
+	ft_putstr_fd(cmd->input_redirect, STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+	if (errno)
+		perror("");
 }

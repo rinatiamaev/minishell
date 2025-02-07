@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 18:32:29 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/06 22:58:34 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/07 10:03:06 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,55 +55,53 @@ static t_cmd	*initialize_cmd(t_ms *ms)
 	if (!cmd)
 		error(ms, "Error malloc() failed in initialize_cmd");
 	ft_memset(cmd, 0, sizeof(t_cmd));
+	cmd->has_command = false;
 	return (cmd);
 }
 
-/* parse_tks()
- *	- initializes a new `t_cmd` structure to represent the parsed cmd
- *	- iterates through the tks array to process each tk:
- *		- `tk_WORD`: Calls `parse_word()` to set the cmd or add argument
- *		- `tk_PIPE`: Indicates a pipeline; calls `parse_pipe()` to link the 
- *		current cmd to the next in the pipeline and exits the loop
- *		- redirection tks (`<`, `>`, `>>`, `<<`): Calls parse_redirections()
- *      to handle input/output redirections or heredoc delimiters
- *	- returns: ptr to the root `t_cmd` structure representing the parsed
- *	cmd, NULL in case of syntax errors or memory allocation failures.
- */
+static int	handle_single_token(t_ms *ms, t_cmd *cmd, t_tk **tks, int *i)
+{
+	if (tks[*i]->type == TK_WORD)
+	{
+		parse_word(ms, cmd, tks[*i]);
+		cmd->has_command = true;
+	}
+	else if (tks[*i]->type == TK_PIPE)
+	{
+		if (!cmd->has_command)
+		{
+			free_cmd(cmd);
+			syn_err(ms, "near unexpected token `|'");
+			return (-1);
+		}
+		if (parse_pipe(ms, cmd, tks, i) == NULL)
+			return (-1);
+		return (1);
+	}
+	else
+	{
+		if (parse_redirections(ms, cmd, tks, i) == -1)
+			return (-1);
+	}
+	return (0);
+}
+
 t_cmd	*parse_tks(t_ms *ms, t_tk **tks)
 {
 	t_cmd	*cmd;
 	int		i;
-	bool	has_command;
+	int		ret;
 
 	i = 0;
 	cmd = initialize_cmd(ms);
-	has_command = false;
-	while (tks[i] != NULL)
+	while (tks[i])
 	{
-		if (tks[i]->type == TK_WORD)
-		{
-			parse_word(ms, cmd, tks[i]);
-			has_command = true;
-		}
-		else if (tks[i]->type == TK_PIPE)
-		{
-			if (!has_command)
-			{
-				free_cmd(cmd);
-				syn_err(ms, "near unexpected token `|'");
-				return (NULL);
-			}
-			if (parse_pipe(ms, cmd, tks, &i) == NULL)
-				return (NULL);
-			break;
-		}
-		else
-		{
-			if (parse_redirections(ms, cmd, tks, &i) == -1)
-				return (NULL);
-		}
+		ret = handle_single_token(ms, cmd, tks, &i);
+		if (ret == -1)
+			return (NULL);
+		if (ret == 1)
+			break ;
 		i++;
 	}
 	return (cmd);
 }
-

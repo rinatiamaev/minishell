@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 08:48:28 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/06 14:58:17 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/07 10:12:13 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	exit_program_ctrld(t_ms *ms)
 {
 	if (ms)
 		free_all(ms);
-	ft_putstr_fd(BOLD_BLUE "👋 minishell🔹 Exit\n" RESET, STDIN_FILENO);
+	// ft_putstr_fd(BOLD_BLUE "👋 minishell🔹 Exit\n" RESET, STDIN_FILENO);
 	rl_clear_history();
 	exit(EXIT_SUCCESS);
 }

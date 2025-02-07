@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:43:40 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/06 21:27:23 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/07 15:05:16 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,11 @@ static int	parse_redirect_output(t_ms *ms, t_cmd *cmd, int *i, int append)
 		syn_err(ms, "invalid tk after '>' or '>>'");
 		return (-1);
 	}
+	if (cmd->output_redirect)
+	{
+		free(cmd->output_redirect);
+		cmd->output_redirect = NULL;
+	}
 	cmd->output_redirect = ft_strdup(ms->tks[*i]->value);
 	if (!cmd->output_redirect)
 	{
@@ -109,16 +114,22 @@ static int	parse_redirect_input(t_ms *ms, t_cmd *cmd, t_tk **tks, int *i)
 		syn_err(ms, "invalid tk after '<'");
 		return (-1);
 	}
+	if (cmd->input_redirect)
+	{
+		free(cmd->input_redirect);
+		cmd->input_redirect = NULL;
+	}
 	cmd->input_redirect = ft_strdup(tks[*i]->value);
 	if (!cmd->input_redirect)
 	{
 		free_cmd(cmd);
 		error(ms, "ft_strdup(): malloc failed");
 	}
-	if (access(cmd->input_redirect, F_OK))
+	if (access(cmd->input_redirect, F_OK) != 0)
 	{
-		free(cmd->input_redirect);
-		cmd->input_redirect = NULL;
+		input_err(ms, cmd);
+		free_cmd(cmd);
+		return (-1);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:27:36 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/06 14:43:24 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/07 11:50:59 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@
 # define RESET "\033[0m"
 
 # define MAX_TKS 24000
-
-# define FILE_PERMISSIONS (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
 
 typedef enum e_tk_type
 {
@@ -65,6 +63,7 @@ typedef struct s_cmd
 	int				append;
 	int				builtin;
 	char			*path;
+	bool			has_command;
 	struct s_cmd	*pipe_to;
 }	t_cmd;
 
@@ -135,6 +134,7 @@ void	syn_err(t_ms *ms, char *error_message);
 void	cmd_err(t_cmd *cmd, char *error_message);
 void	builtin_err(t_ms *ms, char *error_message);
 void	error(t_ms *ms, char *error_message);
+void	input_err(t_ms *ms, t_cmd *cmd);
 
 // UTILS
 char	*x_strdup(t_ms *ms, const char *s);

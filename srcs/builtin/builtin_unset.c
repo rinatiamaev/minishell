@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 13:16:50 by riamaev           #+#    #+#             */
-/*   Updated: 2025/01/31 13:15:12 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/07 12:05:11 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,9 @@ void	builtin_unset(t_ms *ms, t_cmd *cmd)
 {
 	int	i;
 
-	if (!cmd->args || !cmd->args[0])
-	{
-		builtin_err(ms, "not enough arguments");
-		ms->exit_status = 1;
-		return ;
-	}
 	i = 0;
+	if (!cmd->args || !cmd->args[0])
+		return ;
 	while (cmd->args[i])
 	{
 		remove_env_var(ms, cmd->args[i]);

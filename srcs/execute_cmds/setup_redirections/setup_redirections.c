@@ -6,18 +6,19 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 09:12:11 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/06 21:09:27 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/07 14:59:02 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-static int	handle_output_redirection(t_cmd *cmd)
+static int	handle_output_redirection(t_ms *ms, t_cmd *cmd)
 {
 	int				out_fd;
 	int				flags;
 	const mode_t	file_permissions = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
 
+	(void)ms;
 	flags = O_WRONLY | O_CREAT;
 	if (cmd->append)
 		flags |= O_APPEND;
@@ -39,10 +40,11 @@ static int	handle_output_redirection(t_cmd *cmd)
 	return (0);
 }
 
-static int	handle_input_redirection(t_cmd *cmd)
+static int	handle_input_redirection(t_ms *ms, t_cmd *cmd)
 {
 	int	in_fd;
 
+	(void)ms;
 	in_fd = open(cmd->input_redirect, O_RDONLY);
 	if (in_fd == -1)
 	{
@@ -61,15 +63,14 @@ static int	handle_input_redirection(t_cmd *cmd)
 
 int	setup_redirections(t_ms *ms, t_cmd *cmd)
 {
-	(void)ms;
 	if (cmd->input_redirect)
 	{
-		if (handle_input_redirection(cmd) == -1)
+		if (handle_input_redirection(ms, cmd) == -1)
 			return (-1);
 	}
 	if (cmd->output_redirect)
 	{
-		if (handle_output_redirection(cmd) == -1)
+		if (handle_output_redirection(ms, cmd) == -1)
 			return (-1);
 	}
 	return (0);
