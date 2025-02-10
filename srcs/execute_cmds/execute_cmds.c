@@ -6,27 +6,11 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 16:25:47 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/07 15:09:50 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/10 09:53:38 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static void	parent_process(t_ms *ms, pid_t pid, int *fd, int *prev_fd)
-{
-	int	status;
-
-	if (fd[1] != -1)
-		close(fd[1]);
-	if (*prev_fd != -1)
-		close(*prev_fd);
-	*prev_fd = fd[0];
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
-		ms->exit_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		ms->exit_status = 128 + WTERMSIG(status);
-}
 
 static void	handle_pipe(t_ms *ms, t_cmd *cmd, int *fd, int *next_fd)
 {
@@ -59,12 +43,6 @@ void	execute_builtin_cmd(t_ms *ms, t_cmd *cmd)
 		builtin_env(ms);
 	else if (ft_strcmp(cmd->name, "exit") == 0)
 		builtin_exit(ms, cmd);
-	else
-	{
-		write(2, "Unknown builtin command: ", 25);
-		write(2, cmd->name, ft_strlen(cmd->name));
-		write(2, "\n", 1);
-	}
 }
 
 void	execute_builtin_without_pipe(t_ms *ms, t_cmd *cmd)
@@ -87,30 +65,51 @@ void	execute_builtin_without_pipe(t_ms *ms, t_cmd *cmd)
 	close(stdout_backup);
 }
 
-void	execute_cmd(t_ms *ms, t_cmd *cmd)
+void execute_cmd(t_ms *ms, t_cmd *cmd)
 {
-	int		fd[2];
-	int		prev_fd;
-	int		next_fd;
-	pid_t	pid;
+	int     fd[2];
+	int     prev_fd;
+	int     next_fd;
+	pid_t   pid;
+	int     status;
 
 	prev_fd = -1;
 	if (!cmd->pipe_to && cmd->builtin)
-		execute_builtin_without_pipe(ms, cmd);
-	else
 	{
-		while (cmd)
+		execute_builtin_without_pipe(ms, cmd);
+		return;
+	}
+	while (cmd)
+	{
+		next_fd = -1;
+		handle_pipe(ms, cmd, fd, &next_fd);
+		pid = fork();
+		if (pid == -1)
+			error(ms, "fork() failed");
+		if (pid == 0)
 		{
-			next_fd = -1;
-			handle_pipe(ms, cmd, fd, &next_fd);
-			pid = fork();
-			if (pid == -1)
-				error(ms, "fork() failed");
-			if (pid == 0)
-				child_process(ms, prev_fd, next_fd, cmd);
-			else
-				parent_process(ms, pid, fd, &prev_fd);
-			cmd = cmd->pipe_to;
+			child_process(ms, prev_fd, next_fd, cmd);
+			exit(ms->exit_status);
 		}
+		else
+		{
+			if (fd[1] != -1)
+				close(fd[1]);
+			if (prev_fd != -1)
+				close(prev_fd);
+			prev_fd = fd[0];
+		}
+		cmd = cmd->pipe_to;
+	}
+	if (prev_fd != -1)
+		close(prev_fd);
+	while (waitpid(-1, &status, 0) > 0)
+	{
+		wait(&status);
+		if (WIFEXITED(status))
+			ms->exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			ms->exit_status = 128 + WTERMSIG(status);
 	}
 }
+

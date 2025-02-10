@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:00:13 by riamaev           #+#    #+#             */
-/*   Updated: 2025/02/07 15:09:44 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/10 09:50:26 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ static int	setup_pipe_redirection(int prev_fd, int next_fd)
 		if (dup2(prev_fd, STDIN_FILENO) == -1)
 		{
 			perror("dup2() failed for prev_fd");
+			close(prev_fd);
 			return (-1);
 		}
 		close(prev_fd);
@@ -51,6 +52,7 @@ static int	setup_pipe_redirection(int prev_fd, int next_fd)
 		if (dup2(next_fd, STDOUT_FILENO) == -1)
 		{
 			perror("dup2() failed for next_fd");
+			close(next_fd);
 			return (-1);
 		}
 		close(next_fd);
@@ -105,6 +107,4 @@ void	child_process(t_ms *ms, int prev_fd, int next_fd, t_cmd *cmd)
 	if (!argv)
 		exit(ms->exit_status = 1);
 	child_exec_builtin_or_command(ms, cmd, argv);
-	free(argv);
-	exit(EXIT_FAILURE);
 }

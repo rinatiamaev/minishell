@@ -6,13 +6,13 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:27:16 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/05 14:25:03 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/10 09:32:32 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	reset_prompt(t_ms *ms)
+void	reset_prompt(t_ms *ms)
 {
 	free_cmd(ms->cmd);
 	ms->cmd = NULL;

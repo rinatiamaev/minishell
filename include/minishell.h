@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:27:36 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/07 11:50:59 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/10 09:13:08 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ typedef struct s_ms
 
 // PROCESS INPUT
 int		process_input(t_ms *ms);
+void	reset_prompt(t_ms *ms);
 
 // LEXER
 int		lexer(t_ms *ms);
