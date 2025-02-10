@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 08:48:28 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/07 17:31:43 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/10 14:13:25 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,11 @@ int	process_input(t_ms *ms)
 		return (-1);
 	if (lexer(ms))
 		return (-1);
+	// print_tks(ms->tks);
 	ms->cmd = parse_tks(ms, ms->tks);
 	if (!ms->cmd)
 		return (-1);
+	// print_cmd(ms->cmd, 0);
 	if (!validate_cmds_chunks(ms, ms->cmd, ms->envp))
 		return (-1);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 16:25:47 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/10 09:53:38 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/10 14:12:58 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,12 @@ void	execute_builtin_cmd(t_ms *ms, t_cmd *cmd)
 		builtin_env(ms);
 	else if (ft_strcmp(cmd->name, "exit") == 0)
 		builtin_exit(ms, cmd);
+	else
+	{
+		write(2, "Unknown builtin command: ", 25);
+		write(2, cmd->name, ft_strlen(cmd->name));
+		write(2, "\n", 1);
+	}
 }
 
 void	execute_builtin_without_pipe(t_ms *ms, t_cmd *cmd)
@@ -67,11 +73,11 @@ void	execute_builtin_without_pipe(t_ms *ms, t_cmd *cmd)
 
 void execute_cmd(t_ms *ms, t_cmd *cmd)
 {
-	int     fd[2];
-	int     prev_fd;
-	int     next_fd;
-	pid_t   pid;
-	int     status;
+	int		fd[2];
+	int		prev_fd;
+	int		next_fd;
+	pid_t	pid;
+	int		status;
 
 	prev_fd = -1;
 	if (!cmd->pipe_to && cmd->builtin)
@@ -83,9 +89,11 @@ void execute_cmd(t_ms *ms, t_cmd *cmd)
 	{
 		next_fd = -1;
 		handle_pipe(ms, cmd, fd, &next_fd);
+
 		pid = fork();
 		if (pid == -1)
 			error(ms, "fork() failed");
+
 		if (pid == 0)
 		{
 			child_process(ms, prev_fd, next_fd, cmd);
@@ -105,7 +113,6 @@ void execute_cmd(t_ms *ms, t_cmd *cmd)
 		close(prev_fd);
 	while (waitpid(-1, &status, 0) > 0)
 	{
-		wait(&status);
 		if (WIFEXITED(status))
 			ms->exit_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
