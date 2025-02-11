@@ -49,8 +49,8 @@ $(NAME): $(OBJS) $(LIBFT)
 $(LIBFT):
 	make -C libft
 
-$(OBJSDIR)/%.o: %.c include/minishell.h
-	mkdir -p $(@D)
+$(OBJSDIR)/%.o: %.c
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:

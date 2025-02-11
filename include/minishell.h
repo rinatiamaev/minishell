@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:27:36 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/10 14:08:20 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/11 12:54:44 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ typedef struct s_cmd
 	char			**args;
 	char			*input_redirect;
 	char			*output_redirect;
-	int				*append;
+	int				append;
 	char			*heredoc_delimiter;
 	int				builtin;
 	char			*path;
