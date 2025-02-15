@@ -6,12 +6,18 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 18:05:21 by riamaev           #+#    #+#             */
-/*   Updated: 2025/02/05 08:07:43 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/15 13:06:14 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+ * is_valid_identifier:
+ *   Checks if a given name is a valid identifier. The first character
+ *   must be alphabetic or an underscore, and subsequent characters must
+ *   be alphanumeric or an underscore.
+ */
 bool	is_valid_identifier(char *name)
 {
 	int	i;
@@ -28,6 +34,12 @@ bool	is_valid_identifier(char *name)
 	return (true);
 }
 
+/*
+ * find_env_variable:
+ *   Searches for an environment variable in ms->envp that matches var.
+ *   var_len is the length of the variable name. Returns the index if
+ *   found, or -1 if not found.
+ */
 int	find_env_variable(t_ms *ms, char *var, size_t var_len)
 {
 	int	i;
@@ -43,6 +55,11 @@ int	find_env_variable(t_ms *ms, char *var, size_t var_len)
 	return (-1);
 }
 
+/*
+ * append_new_env:
+ *   Appends a new environment variable to ms->envp. Allocates a new array
+ *   containing the existing variables plus the new one.
+ */
 static void	append_new_env(t_ms *ms, char *var)
 {
 	int		i;
@@ -68,6 +85,13 @@ static void	append_new_env(t_ms *ms, char *var)
 	ms->envp = new_envp;
 }
 
+/*
+ * update_existing_env:
+ *   Updates an existing environment variable in ms->envp with a new value.
+ *   It computes the length of the variable name, searches for it, frees the
+ *   old entry, and duplicates the new string. Returns 1 if updated,
+ *   or 0 if the variable was not found.
+ */
 static int	update_existing_env(t_ms *ms, char *var)
 {
 	char	*equals_sign;
@@ -91,6 +115,12 @@ static int	update_existing_env(t_ms *ms, char *var)
 	return (0);
 }
 
+/*
+ * add_or_update_env:
+ *   Adds a new environment variable or updates an existing one.
+ *   If update_existing_env returns 1, the variable is updated;
+ *   otherwise, it is appended to ms->envp.
+ */
 void	add_or_update_env(t_ms *ms, char *var)
 {
 	if (update_existing_env(ms, var) == 1)

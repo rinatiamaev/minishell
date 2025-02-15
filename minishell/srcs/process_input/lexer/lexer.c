@@ -6,12 +6,17 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:20:10 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/14 14:37:54 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/15 12:05:51 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+ * lex_operator:
+ *   Processes an operator token from the input string.
+ *   Determines the operator type and creates the corresponding token.
+ */
 static void	lex_operator(t_ms *ms, int *i, int *tk_index)
 {
 	int	op_len;
@@ -37,6 +42,13 @@ static void	lex_operator(t_ms *ms, int *i, int *tk_index)
 	}
 }
 
+/*
+ * lexer:
+ *   Tokenizes the input string stored in ms->input.
+ *   Allocates an array for tokens and processes the input by skipping
+ *   whitespace, handling operators, and creating word tokens.
+ *   Returns 0 on success, or -1 on failure.
+ */
 int	lexer(t_ms *ms)
 {
 	int		i;

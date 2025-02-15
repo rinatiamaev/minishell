@@ -6,12 +6,16 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:00:13 by riamaev           #+#    #+#             */
-/*   Updated: 2025/02/14 13:39:35 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/15 13:17:39 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+ * setup_argv:
+ *   Creates an argv array for execve from cmd->name and cmd->args.
+ */
 static char	**setup_argv(t_cmd *cmd)
 {
 	int		argc;
@@ -38,6 +42,11 @@ static char	**setup_argv(t_cmd *cmd)
 	return (argv);
 }
 
+/*
+ * setup_input:
+ *   Sets up the child's STDIN. If there is no input redirection,
+ *   prev_fd is duplicated to STDIN_FILENO.
+ */
 static void	setup_input(t_ms *ms, int prev_fd, t_cmd *cmd)
 {
 	bool	has_input_redir;
@@ -62,6 +71,11 @@ static void	setup_input(t_ms *ms, int prev_fd, t_cmd *cmd)
 	}
 }
 
+/*
+ * setup_output:
+ *   Sets up the child's STDOUT. If there is no output redirection,
+ *   next_fd is duplicated to STDOUT_FILENO.
+ */
 static void	setup_output(t_ms *ms, int next_fd, t_cmd *cmd)
 {
 	bool	has_output_redir;
@@ -86,35 +100,47 @@ static void	setup_output(t_ms *ms, int next_fd, t_cmd *cmd)
 	}
 }
 
+/*
+ * execute_child:
+ *   Prepares the argv array and calls execve to execute an external command.
+ *   On error, frees argv and exits with the proper exit status.
+ */
 static void	execute_child(t_ms *ms, t_cmd *cmd)
 {
 	char		**argv;
-	struct stat	st;
 
-	if (stat(cmd->path, &st) == 0 && S_ISDIR(st.st_mode))
-	{
-		cmd_err(cmd, "Is a directory");
-		exit(ms->exit_status = 126);
-	}
 	argv = setup_argv(cmd);
 	if (!argv)
 		exit(ms->exit_status = 1);
 	execve(cmd->path, argv, ms->envp);
 	if (errno)
 	{
-		cmd_err(cmd, NULL);
 		free(argv);
 		if (errno == EACCES || errno == ENOEXEC)
+		{
+			cmd_err(cmd, "126");
 			exit(ms->exit_status = 126);
+		}
 		else if (errno == ENOENT)
+		{
+			cmd_err(cmd, "127 command not found");
 			exit(ms->exit_status = 127);
+		}
 		else
 			exit(ms->exit_status = 1);
 	}
 }
 
+/*
+ * child_process:
+ *   Configures I/O redirections, handles builtins, and executes external
+ *   commands in the child process. It checks for redirections,
+ *   calls setup_redir, and then either executes a builtin or runs execve.
+ */
 void	child_process(t_ms *ms, int prev_fd, int next_fd, t_cmd *cmd)
 {
+	struct stat	st;
+
 	if (!cmd->name)
 		exit(ms->exit_status = 0);
 	setup_input(ms, prev_fd, cmd);
@@ -125,6 +151,11 @@ void	child_process(t_ms *ms, int prev_fd, int next_fd, t_cmd *cmd)
 	{
 		execute_builtin_cmd(ms, cmd);
 		exit(ms->exit_status);
+	}
+	if (stat(cmd->path, &st) == 0 && S_ISDIR(st.st_mode))
+	{
+		cmd_err(cmd, "Is a directory");
+		exit(ms->exit_status = 126);
 	}
 	execute_child(ms, cmd);
 }

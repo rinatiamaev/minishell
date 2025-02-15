@@ -6,12 +6,19 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 13:21:20 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/14 10:25:05 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/15 13:21:46 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+ * setup_redir:
+ *   Applies input and output redirections for a command.
+ *   It loops through the command's input_redirs and output_redirs
+ *   arrays, calling the respective handler for each redirection.
+ *   Returns 0 on success or -1 on failure.
+ */
 int	setup_redir(t_ms *ms, t_cmd *cmd)
 {
 	int	i;

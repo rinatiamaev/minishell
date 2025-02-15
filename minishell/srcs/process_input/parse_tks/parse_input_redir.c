@@ -6,12 +6,17 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 12:57:00 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/14 14:28:28 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/15 12:46:49 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+ * init_input_redir:
+ *   Allocates and initializes an input redirection structure.
+ *   Sets flags for input redirection and advances the token index.
+ */
 static t_redir	*init_input_redir(t_ms *ms, int *i)
 {
 	t_redir	*rd;
@@ -28,6 +33,13 @@ static t_redir	*init_input_redir(t_ms *ms, int *i)
 	return (rd);
 }
 
+/*
+ * consume_input_redir_tar:
+ *   Consumes the token after an input redirection operator.
+ *   For a heredoc, it expects a heredoc delimiter token.
+ *   For a regular input redirection, it expects a word token.
+ *   Returns -1 on error and 0 on success.
+ */
 static int	consume_input_redir_tar(t_ms *ms, t_redir *rd, t_tk **tks, int *i)
 {
 	if (!tks[*i])
@@ -55,6 +67,12 @@ static int	consume_input_redir_tar(t_ms *ms, t_redir *rd, t_tk **tks, int *i)
 	return (0);
 }
 
+/*
+ * create_input_redir:
+ *   Creates an input redirection structure and consumes the token
+ *   corresponding to the file or heredoc delimiter.
+ *   Marks the structure as heredoc if applicable.
+ */
 static t_redir	*create_input_redir(t_ms *ms, t_tk **tks, int *i)
 {
 	t_redir	*rd;
@@ -72,6 +90,12 @@ static t_redir	*create_input_redir(t_ms *ms, t_tk **tks, int *i)
 	return (rd);
 }
 
+/*
+ * append_input_redir_to_cmd:
+ *   Appends an input redirection structure to the command's array
+ *   of input redirections. Reallocates the array and returns -1
+ *   on failure.
+ */
 static int	append_input_redir_to_cmd(t_cmd *cmd, t_redir *rd)
 {
 	int		count;
@@ -90,6 +114,11 @@ static int	append_input_redir_to_cmd(t_cmd *cmd, t_redir *rd)
 	return (0);
 }
 
+/*
+ * append_input_redir:
+ *   Creates and appends an input redirection to the given command.
+ *   Returns -1 on error or 0 on success.
+ */
 int	append_input_redir(t_ms *ms, t_cmd *cmd, t_tk **tks, int *i)
 {
 	t_redir	*rd;

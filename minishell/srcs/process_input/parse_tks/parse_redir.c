@@ -12,6 +12,13 @@
 
 #include "minishell.h"
 
+/*
+ * parse_redir:
+ *   Parses redirection tokens from the token list and updates
+ *   the command structure accordingly. Depending on the token
+ *   type, it calls the appropriate function to append an input or
+ *   output redirection to the command.
+ */
 int	parse_redir(t_ms *ms, t_cmd *cmd, t_tk **tks, int *i)
 {
 	t_tk_type	type;

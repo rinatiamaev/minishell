@@ -6,12 +6,19 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 12:58:45 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/13 12:58:46 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/15 12:24:17 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+ * expand_in_tk:
+ *   Processes a token string by expanding environment variables.
+ *   It iterates over the input, calling process_variable when a '$'
+ *   is encountered and process_literal otherwise. The results are
+ *   concatenated to form the expanded string, which is returned.
+ */
 static char	*expand_in_tk(t_ms *ms, char *str)
 {
 	char	*result;
@@ -33,6 +40,12 @@ static char	*expand_in_tk(t_ms *ms, char *str)
 	return (result);
 }
 
+/*
+ * expand_tks:
+ *   Iterates through the token list in the minishell structure and
+ *   expands tokens of type TK_WORD that are not single-quoted.
+ *   The token's value is replaced with the expanded string.
+ */
 int	expand_tks(t_ms *ms)
 {
 	int		i;

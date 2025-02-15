@@ -6,12 +6,17 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 08:42:03 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/13 10:06:58 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/15 12:49:27 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
+/*
+ * search_executable:
+ *   Searches for the executable file in the given path directories.
+ *   Returns the candidate path if found, or NULL.
+ */
 static char	*search_executable(char **path_directories, const char *cmd)
 {
 	int		i;
@@ -32,6 +37,10 @@ static char	*search_executable(char **path_directories, const char *cmd)
 	return (NULL);
 }
 
+/*
+ * get_envp_path:
+ *   Retrieves the PATH value from the environment variables.
+ */
 static char	*get_envp_path(char **envp)
 {
 	while (*envp)
@@ -43,6 +52,11 @@ static char	*get_envp_path(char **envp)
 	return (NULL);
 }
 
+/*
+ * check_absolute_path:
+ *   Checks if cmd is an absolute path and executable.
+ *   Returns a duplicate of cmd if executable, else NULL.
+ */
 static char	*check_absolute_path(char *cmd)
 {
 	if (ft_strchr(cmd, '/') && access(cmd, X_OK) == 0)
@@ -50,6 +64,11 @@ static char	*check_absolute_path(char *cmd)
 	return (NULL);
 }
 
+/*
+ * get_external_cmd_path:
+ *   Determines the path of an external command. First, it checks for an
+ *   absolute path, then uses the PATH environment variable.
+ */
 static char	*get_external_cmd_path(t_ms *ms, const char *cmd_name)
 {
 	char	*path;
@@ -70,6 +89,12 @@ static char	*get_external_cmd_path(t_ms *ms, const char *cmd_name)
 	return (path);
 }
 
+/*
+ * is_external:
+ *   Checks if the command is an external executable. If found, assigns
+ *   the executable path to cmd->path and returns true. Otherwise, it
+ *   duplicates the command name and returns false.
+ */
 bool	is_external(t_ms *ms, t_cmd *cmd, char *cmd_name)
 {
 	char	*path;

@@ -6,12 +6,17 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:27:16 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/12 23:30:59 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/15 12:04:12 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+ * reset_prompt:
+ * Cleans up the shell's internal state after each command execution by
+ * freeing memory allocated for the command, token list, and input string.
+ */
 static void	reset_prompt(t_ms *ms)
 {
 	free_cmd(ms->cmd);
@@ -22,6 +27,12 @@ static void	reset_prompt(t_ms *ms)
 	ms->input = NULL;
 }
 
+/*
+ * setup_minishell:
+ * Initializes the shell's environment and configuration.
+ * Verifies that no arguments are passed, allocates memory for the shell,
+ * and copies the environment variables. Exits on failure.
+ */
 static t_ms	*setup_minishell(int argc, char **argv, char **envp)
 {
 	t_ms	*ms;
@@ -42,6 +53,13 @@ static t_ms	*setup_minishell(int argc, char **argv, char **envp)
 	return (ms);
 }
 
+/*
+ * main:
+ * Entry point of the minishell. Sets up the shell, configures signal
+ * handlers, and enters a loop that processes input, executes commands,
+ * and resets the shell state for the next input. It resets the prompt
+ * if an error occurs during input processing.
+ */
 int	main(int argc, char **argv, char **envp)
 {
 	t_ms	*ms;

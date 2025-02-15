@@ -6,12 +6,18 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 11:06:06 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/14 14:28:09 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/15 12:45:23 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+ * init_output_redir:
+ *   Allocates and initializes an output redirection structure.
+ *   Sets the redirection type (append or not) based on the token and
+ *   advances the token index.
+ */
 static t_redir	*init_output_redir(t_ms *ms, t_tk **tks, int *i)
 {
 	t_redir	*rd;
@@ -30,6 +36,12 @@ static t_redir	*init_output_redir(t_ms *ms, t_tk **tks, int *i)
 	return (rd);
 }
 
+/*
+ * consume_output_filename:
+ *   Verifies that a filename token exists after an output redirection
+ *   operator. Duplicates its value into the redirection structure.
+ *   Returns -1 on error, 0 on success.
+ */
 static int	consume_output_filename(t_ms *ms, t_redir *rd, t_tk **tks, int *i)
 {
 	if (!tks[*i])
@@ -47,6 +59,11 @@ static int	consume_output_filename(t_ms *ms, t_redir *rd, t_tk **tks, int *i)
 	return (0);
 }
 
+/*
+ * create_output_redir:
+ *   Creates an output redirection structure by initializing it and
+ *   consuming the output filename token. Frees the structure on failure.
+ */
 static t_redir	*create_output_redir(t_ms *ms, t_tk **tks, int *i)
 {
 	t_redir	*rd;
@@ -60,6 +77,11 @@ static t_redir	*create_output_redir(t_ms *ms, t_tk **tks, int *i)
 	return (rd);
 }
 
+/*
+ * append_output_redir_to_cmd:
+ *   Appends an output redirection structure to the command's array of
+ *   output redirections. Resizes the array and returns -1 on failure.
+ */
 static int	append_output_redir_to_cmd(t_cmd *cmd, t_redir *rd)
 {
 	int		count;
@@ -78,6 +100,11 @@ static int	append_output_redir_to_cmd(t_cmd *cmd, t_redir *rd)
 	return (0);
 }
 
+/*
+ * append_output_redir:
+ *   Creates an output redirection structure and appends it to the
+ *   command's output redirection array. Returns -1 on error, or 0 on success.
+ */
 int	append_output_redir(t_ms *ms, t_cmd *cmd, t_tk **tks, int *i)
 {
 	t_redir	*rd;

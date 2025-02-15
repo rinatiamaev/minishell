@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:53:00 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/04 11:25:50 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/15 13:26:05 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,10 @@
  *	- Interactive: when shell is waiting for user input (Ctrl-C resets prompt)
  *	- Command (non-interactive): when a command is running
  *	(shell ignores signals, letting the child process handle them).
- */
-
-/* ignore_sigquit()
- *	Explicitly sets SIGQUIT (Ctrl-\) to be ignored by this process.
- *	Typically used in interactive mode so the shell doesn't quit on Ctrl-\.
+ *
+ * ignore_sigquit:
+ *   Sets the SIGQUIT signal handler to ignore the signal.
+ *   This is used in interactive mode.
  */
 static void	ignore_sigquit(t_ms *ms)
 {
@@ -32,9 +31,10 @@ static void	ignore_sigquit(t_ms *ms)
 		error(ms, "sigaction() failed in ingnore_sigquit()");
 }
 
-/* interactive_sigint_handler()
- *	Called when user presses Ctrl-C in interactive mode.
- *	Prints a newline, clears the current input line, and re-displays prompt.
+/*
+ * interactive_sigint_handler:
+ *   Handles SIGINT in interactive mode. Writes a newline and resets
+ *   the readline prompt.
  */
 static void	interactive_sigint_handler(int signo)
 {
@@ -45,11 +45,10 @@ static void	interactive_sigint_handler(int signo)
 	rl_redisplay();
 }
 
-/* set_signals_interactive()
- *	In interactive mode:
- *		- SIGINT (Ctrl-C) resets the prompt
- *		- SIGQUIT (Ctrl-\) is ignored
- *	This mode is enabled when minishell is awaiting user commands.
+/*
+ * set_signals_interactive:
+ *   Configures signal handlers for interactive mode. It ignores SIGQUIT
+ *   and sets a custom SIGINT handler.
  */
 void	set_signals_interactive(t_ms *ms)
 {
@@ -62,9 +61,10 @@ void	set_signals_interactive(t_ms *ms)
 		error(ms, "sigaction() failed in set_signals_interactive()");
 }
 
-/* cmd_sig_handler:
- *	Handler for Ctrl-C or Ctrl-\ in "command" mode (non-interactive).
- *	The child process (command) can receive and handle signals on its own.
+/*
+ * cmd_sig_handler:
+ *   Handles signals during command execution. Writes a newline on
+ *   receiving SIGINT or SIGQUIT.
  */
 static void	cmd_sig_handler(int signo)
 {
@@ -72,10 +72,10 @@ static void	cmd_sig_handler(int signo)
 	write(STDOUT_FILENO, "\n", 1);
 }
 
-/* set_signals_noninteractive:
- *	In "non-interactive" mode for the shell, a command is running.
- *	Let the child process handle Ctrl-C, Ctrl-\ signals,
- *	the shell does not react.
+/*
+ * set_signals_noninteractive:
+ *   Configures signal handlers for non-interactive mode (when a command
+ *   is running). It sets the custom handler for both SIGINT and SIGQUIT.
  */
 void	set_signals_noninteractive(t_ms *ms)
 {

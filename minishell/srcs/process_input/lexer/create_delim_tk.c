@@ -6,12 +6,18 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 01:06:52 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/13 10:16:19 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/15 12:15:27 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+ * detect_quoted_delimiter:
+ *   Checks if the token's value is wrapped with quotes.
+ *   If the first and last characters are matching quotes,
+ *   sets the token's delimiter_quoted flag and removes them.
+ */
 static void	detect_quoted_delimiter(t_ms *ms, t_tk *tk)
 {
 	int		len;
@@ -35,6 +41,12 @@ static void	detect_quoted_delimiter(t_ms *ms, t_tk *tk)
 	}
 }
 
+/*
+ * create_delimiter_tk:
+ *   Creates a heredoc delimiter token by reading the input
+ *   until a whitespace or operator is encountered. The token's
+ *   value is extracted, and any enclosing quotes are handled.
+ */
 t_tk	*create_delimiter_tk(t_ms *ms, int *i)
 {
 	t_tk	*tk;

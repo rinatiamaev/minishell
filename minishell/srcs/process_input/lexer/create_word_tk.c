@@ -6,12 +6,19 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 01:08:52 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/14 14:40:23 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/15 12:11:23 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+ * gather_word_segments:
+ *   Aggregates segments for a word token from the input string.
+ *   Processes single-quoted, double-quoted, and unquoted segments until
+ *   the end of the input or a whitespace or an operator is encountered.
+ *   Returns -1 on failure, or 0 on success.
+ */
 static int	gather_word_segments(t_ms *ms, int *i, int tk_index)
 {
 	int	old_i;
@@ -41,6 +48,11 @@ static int	gather_word_segments(t_ms *ms, int *i, int tk_index)
 	return (0);
 }
 
+/*
+ * create_word_tk:
+ *   Creates a new word token and gathers its segments from the input.
+ *   Returns the created token on success, or NULL on failure.
+ */
 t_tk	*create_word_tk(t_ms *ms, int *i, int tk_index)
 {
 	ms->tks[tk_index] = new_tk(ms, TK_WORD, "", QUOTE_NONE);

@@ -12,6 +12,12 @@
 
 #include "minishell.h"
 
+/*
+ * is_n_flag:
+ *   Checks if the given argument is a valid "-n" flag.
+ *   Returns true if the argument starts with '-' followed only by 'n's,
+ *   false otherwise.
+ */
 static bool	is_n_flag(const char *arg)
 {
 	int	i;
@@ -28,6 +34,13 @@ static bool	is_n_flag(const char *arg)
 	return (true);
 }
 
+/*
+ * builtin_echo:
+ *   Implements the echo builtin command. If one or more "-n" flags are
+ *   present, no trailing newline is printed. Otherwise, a newline is
+ *   printed after the arguments. Arguments are printed separated by a
+ *   single space.
+ */
 void	builtin_echo(t_ms *ms, t_cmd *cmd)
 {
 	int		i;

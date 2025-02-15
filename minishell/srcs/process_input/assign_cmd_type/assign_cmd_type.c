@@ -12,6 +12,14 @@
 
 #include "minishell.h"
 
+/*
+** assign_cmd_type - Set the type of each command in the pipeline.
+**
+** This function iterates through the command list linked via the pipe_to
+** pointer. For each command with a name, it determines whether the
+** command is a builtin or an external command. If the command is
+** builtin, the builtin flag is set to true; otherwise, it is set to false.
+*/
 void	assign_cmd_type(t_ms *ms, t_cmd *cmd)
 {
 	t_cmd	*current;

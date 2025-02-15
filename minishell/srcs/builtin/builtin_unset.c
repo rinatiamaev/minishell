@@ -6,16 +6,17 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 13:16:50 by riamaev           #+#    #+#             */
-/*   Updated: 2025/02/07 12:05:11 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/15 12:51:14 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/* create_new_envp():
- *	- Allocates a new environment array.
- *	- Copies over all variables except the one to be removed.
- *	- Returns the new environment array.
+/*
+ * create_new_envp:
+ *   Creates a new environment array that excludes the variable whose key
+ *   matches the provided key. The matching entry is freed and not added.
+ *   Returns the new environment array.
  */
 static char	**create_new_envp(t_ms *ms, const char *key, size_t key_len)
 {
@@ -45,11 +46,10 @@ static char	**create_new_envp(t_ms *ms, const char *key, size_t key_len)
 	return (new_envp);
 }
 
-/**
+/*
  * remove_env_var:
- *  - Finds and removes an environment variable by key.
- *  - Calls `create_new_envp` to allocate a new env list.
- *  - Frees the old env list and replaces `ms->envp`.
+ *   Removes an environment variable from ms->envp by key.
+ *   Replaces the current environment with a new one missing the key.
  */
 static void	remove_env_var(t_ms *ms, const char *key)
 {
@@ -64,6 +64,11 @@ static void	remove_env_var(t_ms *ms, const char *key)
 	ms->envp = new_envp;
 }
 
+/*
+ * builtin_unset:
+ *   Implements the unset builtin by removing each key provided in the
+ *   command arguments from the environment. Sets exit_status to 0.
+ */
 void	builtin_unset(t_ms *ms, t_cmd *cmd)
 {
 	int	i;

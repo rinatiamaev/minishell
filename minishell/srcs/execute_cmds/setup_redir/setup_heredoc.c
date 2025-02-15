@@ -6,12 +6,19 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 13:21:25 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/13 13:58:34 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/15 13:18:59 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+ * read_heredoc_in_pipe:
+ *   Reads user input for a heredoc, writing each line into a pipe.
+ *   The input is read until the delimiter is encountered.
+ *   If the heredoc is not quoted, environment variables in the line
+ *   are expanded. Each line is written to the pipe followed by a newline.
+ */
 static void	read_heredoc_in_pipe(t_ms *ms, int write_fd, char *delimiter,
 	bool quoted)
 {
@@ -41,6 +48,12 @@ static void	read_heredoc_in_pipe(t_ms *ms, int write_fd, char *delimiter,
 	close(write_fd);
 }
 
+/*
+ * read_one_heredoc:
+ *   Sets up a pipe for a single heredoc and calls read_heredoc_in_pipe to
+ *   read the heredoc contents from the user. The read end of the pipe is
+ *   stored in rd->heredoc_fd for later use.
+ */
 static int	read_one_heredoc(t_ms *ms, t_redir *rd)
 {
 	int	pipefd[2];
@@ -55,6 +68,12 @@ static int	read_one_heredoc(t_ms *ms, t_redir *rd)
 	return (0);
 }
 
+/*
+ * read_all_heredocs:
+ *   Iterates through all commands in the pipeline and processes their
+ *   input redirections. For each heredoc redirection, it calls read_one_heredoc
+ *   to set up the heredoc content in a pipe.
+ */
 int	read_all_heredocs(t_ms *ms, t_cmd *cmd)
 {
 	t_cmd	*c;
