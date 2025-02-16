@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 11:06:06 by nlouis            #+#    #+#             */
-/*   Updated: 2025/02/15 12:45:23 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/02/16 17:58:02 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ static t_redir	*init_output_redir(t_ms *ms, t_tk **tks, int *i)
 	rd->filename = NULL;
 	rd->delimiter = NULL;
 	rd->delimiter_quoted = false;
+	rd->heredoc_fd = -1;
 	if (tks[*i]->type == TK_APPEND_OUTPUT)
 		rd->is_append = true;
 	else
